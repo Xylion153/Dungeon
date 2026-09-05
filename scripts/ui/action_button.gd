@@ -40,5 +40,8 @@ func start_cooldown(duration: float) -> void:
 	_cooldown_duration = max(duration, 0.001)
 	_cooldown_remaining = _cooldown_duration
 
+func set_label(text: String) -> void:
+	button.text = text
+
 func _on_button_pressed() -> void:
 	pressed_action.emit()

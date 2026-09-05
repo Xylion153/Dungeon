@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="SkillData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/data/skill_data.gd" id="1_skill"]
+
+[resource]
+script = ExtResource("1_skill")
+skill_name = "Frost Nova"
+description = "Weaker AoE damage, but slows everything it hits for a few seconds. Crowd control."
+damage = 15.0
+radius = 120.0
+cooldown = 6.0
+self_invulnerable_duration = 0.0
+slow_duration = 3.0
+slow_multiplier = 0.5
+dash_distance = 0.0

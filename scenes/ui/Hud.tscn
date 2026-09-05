@@ -9,21 +9,6 @@ script = ExtResource("1")
 
 [node name="VirtualJoystick" parent="." instance=ExtResource("2")]
 
-[node name="SkillButton" parent="." instance=ExtResource("3")]
-layout_mode = 1
-anchors_preset = -1
-anchor_left = 1.0
-anchor_top = 1.0
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = -160.0
-offset_top = -420.0
-offset_right = -60.0
-offset_bottom = -320.0
-
-[node name="Button" parent="SkillButton" index="0"]
-text = "Skill"
-
 [node name="AttackButton" parent="." instance=ExtResource("3")]
 layout_mode = 1
 anchors_preset = -1
@@ -31,10 +16,10 @@ anchor_left = 1.0
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = -180.0
-offset_top = -300.0
+offset_left = -200.0
+offset_top = -200.0
 offset_right = -40.0
-offset_bottom = -160.0
+offset_bottom = -40.0
 disable_while_on_cooldown = false
 
 [node name="Button" parent="AttackButton" index="0"]
@@ -47,10 +32,25 @@ anchor_left = 1.0
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = -160.0
-offset_top = -140.0
-offset_right = -60.0
-offset_bottom = -40.0
+offset_left = -340.0
+offset_top = -340.0
+offset_right = -230.0
+offset_bottom = -230.0
 
 [node name="Button" parent="DashButton" index="0"]
 text = "Dash"
+
+[node name="SkillButton" parent="." instance=ExtResource("3")]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -480.0
+offset_top = -340.0
+offset_right = -370.0
+offset_bottom = -230.0
+
+[node name="Button" parent="SkillButton" index="0"]
+text = "Skill"

@@ -1,9 +1,10 @@
-[gd_scene load_steps=5 format=3]
+[gd_scene load_steps=6 format=3]
 
 [ext_resource type="PackedScene" path="res://scenes/player/Player.tscn" id="1"]
 [ext_resource type="PackedScene" path="res://scenes/enemies/MeleeChaser.tscn" id="2"]
 [ext_resource type="PackedScene" path="res://scenes/ui/Hud.tscn" id="3"]
 [ext_resource type="PackedScene" path="res://scenes/ui/FeelKnobsPanel.tscn" id="4"]
+[ext_resource type="PackedScene" path="res://scenes/world/Obstacle.tscn" id="5"]
 
 [node name="Arena" type="Node2D"]
 
@@ -20,6 +21,18 @@ position = Vector2(540, 600)
 
 [node name="MeleeChaser2" parent="." instance=ExtResource("2")]
 position = Vector2(300, 850)
+
+[node name="Obstacle" parent="." instance=ExtResource("5")]
+position = Vector2(700, 1050)
+scale = Vector2(1.5, 0.4)
+
+[node name="Obstacle2" parent="." instance=ExtResource("5")]
+position = Vector2(250, 1150)
+scale = Vector2(0.4, 2.0)
+
+[node name="Obstacle3" parent="." instance=ExtResource("5")]
+position = Vector2(780, 750)
+scale = Vector2(1.2, 1.2)
 
 [node name="Hud" parent="." instance=ExtResource("3")]
 

@@ -18,6 +18,11 @@ var _is_dashing := false
 var _dash_timer := 0.0
 var _dash_cooldown_timer := 0.0
 var _dash_direction := Vector2.ZERO
+var _aiming_with_mouse := false
+
+func _unhandled_input(event: InputEvent) -> void:
+	if event is InputEventMouseMotion:
+		_aiming_with_mouse = true
 
 func _ready() -> void:
 	super._ready()
@@ -51,6 +56,11 @@ func _physics_process(delta: float) -> void:
 		velocity = move_vector * stat_sheet.get_stat("move_speed") + consume_knockback(delta)
 		if move_vector != Vector2.ZERO:
 			facing_direction = move_vector
+
+	if _aiming_with_mouse and not _is_dashing:
+		var to_mouse: Vector2 = get_global_mouse_position() - global_position
+		if to_mouse.length() > 4.0:
+			facing_direction = to_mouse.normalized()
 
 	move_and_slide()
 	sprite.rotation = facing_direction.angle() + PI / 2.0

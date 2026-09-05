@@ -21,6 +21,7 @@ func _bind_player() -> void:
 	attack_button.pressed_action.connect(_player.player_input.request_attack)
 	skill_button.pressed_action.connect(_player.player_input.request_skill)
 	dash_button.pressed_action.connect(_player.player_input.request_dash)
+	attack_button.set_label(GameState.equipped_weapon.weapon_name)
 
 func _on_dash_started(actor: Node) -> void:
 	if actor == _player:

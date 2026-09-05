@@ -22,11 +22,11 @@ func _physics_process(_delta: float) -> void:
 	if keyboard_vector != Vector2.ZERO:
 		move_vector = keyboard_vector.normalized()
 
-	if Input.is_key_pressed(KEY_J):
+	if Input.is_mouse_button_pressed(MOUSE_BUTTON_LEFT):
 		attack_requested = true
 	if Input.is_key_pressed(KEY_K):
 		skill_requested = true
-	if Input.is_key_pressed(KEY_SPACE):
+	if Input.is_mouse_button_pressed(MOUSE_BUTTON_RIGHT):
 		dash_requested = true
 
 func set_joystick_vector(value: Vector2) -> void:
