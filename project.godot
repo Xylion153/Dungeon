@@ -25,6 +25,8 @@ GameState="*res://scripts/autoload/game_state.gd"
 
 window/size/viewport_width=1080
 window/size/viewport_height=1920
+window/size/window_width_override=608
+window/size/window_height_override=1080
 window/stretch/mode="canvas_items"
 window/handheld/orientation="portrait"
 
