@@ -1,0 +1,26 @@
+[gd_scene load_steps=5 format=3]
+
+[ext_resource type="PackedScene" path="res://scenes/player/Player.tscn" id="1"]
+[ext_resource type="PackedScene" path="res://scenes/enemies/MeleeChaser.tscn" id="2"]
+[ext_resource type="PackedScene" path="res://scenes/ui/Hud.tscn" id="3"]
+[ext_resource type="PackedScene" path="res://scenes/ui/FeelKnobsPanel.tscn" id="4"]
+
+[node name="Arena" type="Node2D"]
+
+[node name="Background" type="ColorRect" parent="."]
+offset_right = 1080.0
+offset_bottom = 1920.0
+color = Color(0.11, 0.12, 0.1, 1)
+
+[node name="Player" parent="." instance=ExtResource("1")]
+position = Vector2(540, 1400)
+
+[node name="MeleeChaser" parent="." instance=ExtResource("2")]
+position = Vector2(540, 600)
+
+[node name="MeleeChaser2" parent="." instance=ExtResource("2")]
+position = Vector2(300, 850)
+
+[node name="Hud" parent="." instance=ExtResource("3")]
+
+[node name="FeelKnobsPanel" parent="." instance=ExtResource("4")]
