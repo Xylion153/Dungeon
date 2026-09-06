@@ -13,8 +13,15 @@ static func list_resources(dir_path: String) -> Array:
 	dir.list_dir_begin()
 	var file_name := dir.get_next()
 	while file_name != "":
-		if not dir.current_is_dir() and file_name.ends_with(".tres"):
-			file_names.append(file_name)
+		# Exported builds remap resource files (sword.tres -> sword.tres.remap
+		# on disk inside the .pck) - load() resolves that transparently, but a
+		# raw directory listing sees the .remap name, not the .tres one.
+		if not dir.current_is_dir():
+			var clean_name := file_name
+			if clean_name.ends_with(".remap"):
+				clean_name = clean_name.substr(0, clean_name.length() - ".remap".length())
+			if clean_name.ends_with(".tres"):
+				file_names.append(clean_name)
 		file_name = dir.get_next()
 	dir.list_dir_end()
 
