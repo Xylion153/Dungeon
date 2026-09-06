@@ -37,3 +37,4 @@ scale = Vector2(1.2, 1.2)
 [node name="Hud" parent="." instance=ExtResource("3")]
 
 [node name="FeelKnobsPanel" parent="." instance=ExtResource("4")]
+

@@ -22,6 +22,7 @@ var _is_dashing := false
 var _dash_timer := 0.0
 var _dash_cooldown_timer := 0.0
 var _dash_direction := Vector2.ZERO
+
 func _ready() -> void:
 	super._ready()
 	add_to_group("player")
@@ -131,9 +132,12 @@ func _do_melee_hit(step: WeaponComboStepData) -> void:
 			_apply_step_damage(body, step)
 
 func _spawn_slash(step: WeaponComboStepData) -> void:
+	var parent: Node = get_tree().current_scene
+	if parent == null:
+		return # Mid scene-change; the swing itself still resolves.
 	var slash := SlashEffectScene.instantiate()
 	slash.setup(step.arc_degrees, step.range)
-	get_tree().current_scene.add_child(slash)
+	parent.add_child(slash)
 	slash.global_position = global_position
 	slash.rotation = facing_direction.angle()
 
