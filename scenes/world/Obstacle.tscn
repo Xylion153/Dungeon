@@ -8,8 +8,14 @@ collision_layer = 1
 collision_mask = 0
 
 [node name="Shape" type="Polygon2D" parent="."]
-color = Color(0.35, 0.32, 0.28, 1)
+color = Color(0.24, 0.25, 0.3, 1)
 polygon = PackedVector2Array(-50, -50, 50, -50, 50, 50, -50, 50)
+
+[node name="Outline" type="Line2D" parent="."]
+points = PackedVector2Array(-50, -50, 50, -50, 50, 50, -50, 50, -50, -50)
+width = 3.0
+default_color = Color(0.55, 0.6, 0.7, 0.8)
+joint_mode = 2
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 shape = SubResource("RectangleShape2D_obstacle")

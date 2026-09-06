@@ -10,6 +10,24 @@ var skill_requested := false
 var dash_requested := false
 
 var _keyboard_active := false
+var _using_touch := false
+var _mouse_moved := false
+
+func is_using_touch() -> bool:
+	return _using_touch
+
+func is_mouse_aiming() -> bool:
+	return _mouse_moved and not _using_touch
+
+func _input(event: InputEvent) -> void:
+	# Godot emulates mouse events from touch, so on a phone a finger held on
+	# the joystick reads as a held left mouse button. Once a real touch is
+	# seen, mouse polling is disabled for good and only the on-screen buttons
+	# drive attack/dash.
+	if event is InputEventScreenTouch or event is InputEventScreenDrag:
+		_using_touch = true
+	elif event is InputEventMouseMotion and not _using_touch:
+		_mouse_moved = true
 
 func _physics_process(_delta: float) -> void:
 	var keyboard_vector := Vector2.ZERO
@@ -32,10 +50,14 @@ func _physics_process(_delta: float) -> void:
 		move_vector = Vector2.ZERO
 		_keyboard_active = false
 
-	if Input.is_mouse_button_pressed(MOUSE_BUTTON_LEFT):
-		attack_requested = true
 	if Input.is_key_pressed(KEY_K):
 		skill_requested = true
+
+	if _using_touch:
+		return # On touch, only the on-screen buttons request attack/dash.
+
+	if Input.is_mouse_button_pressed(MOUSE_BUTTON_LEFT):
+		attack_requested = true
 	if Input.is_mouse_button_pressed(MOUSE_BUTTON_RIGHT):
 		dash_requested = true
 

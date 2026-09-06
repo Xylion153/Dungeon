@@ -6,9 +6,11 @@ extends CombatActor
 @export var dash_duration := 0.18
 @export var dash_cooldown := 0.9
 
+const SlashEffectScene := preload("res://scenes/combat/SlashEffect.tscn")
+
 @onready var player_input: PlayerInput = $PlayerInput
 @onready var player_combat: PlayerCombat = $PlayerCombat
-@onready var sprite: Polygon2D = $Shape
+@onready var sprite: ActorShape = $Shape
 @onready var camera: Camera2D = $Camera2D
 
 var stat_sheet := StatSheet.new()
@@ -18,12 +20,6 @@ var _is_dashing := false
 var _dash_timer := 0.0
 var _dash_cooldown_timer := 0.0
 var _dash_direction := Vector2.ZERO
-var _aiming_with_mouse := false
-
-func _unhandled_input(event: InputEvent) -> void:
-	if event is InputEventMouseMotion:
-		_aiming_with_mouse = true
-
 func _ready() -> void:
 	super._ready()
 	add_to_group("player")
@@ -57,7 +53,7 @@ func _physics_process(delta: float) -> void:
 		if move_vector != Vector2.ZERO:
 			facing_direction = move_vector
 
-	if _aiming_with_mouse and not _is_dashing:
+	if player_input.is_mouse_aiming() and not _is_dashing:
 		var to_mouse: Vector2 = get_global_mouse_position() - global_position
 		if to_mouse.length() > 4.0:
 			facing_direction = to_mouse.normalized()
@@ -100,6 +96,8 @@ func perform_step_hit(step: WeaponComboStepData) -> void:
 		_do_ranged_hit(step)
 
 func _do_melee_hit(step: WeaponComboStepData) -> void:
+	_spawn_slash(step)
+
 	var space_state := get_world_2d().direct_space_state
 	var query := PhysicsShapeQueryParameters2D.new()
 	var shape := CircleShape2D.new()
@@ -118,6 +116,13 @@ func _do_melee_hit(step: WeaponComboStepData) -> void:
 		var to_target: Vector2 = body.global_position - global_position
 		if to_target.length() <= 0.01 or abs(facing_direction.angle_to(to_target)) <= half_arc:
 			_apply_step_damage(body, step)
+
+func _spawn_slash(step: WeaponComboStepData) -> void:
+	var slash := SlashEffectScene.instantiate()
+	slash.setup(step.arc_degrees, step.range)
+	get_tree().current_scene.add_child(slash)
+	slash.global_position = global_position
+	slash.rotation = facing_direction.angle()
 
 func _do_ranged_hit(_step: WeaponComboStepData) -> void:
 	pass # No ranged weapon is wired up in this pass; Gun/Wand arrive as data + this branch later.

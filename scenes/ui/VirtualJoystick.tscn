@@ -3,18 +3,30 @@
 [ext_resource type="Script" path="res://scripts/ui/virtual_joystick.gd" id="1"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_base"]
-bg_color = Color(1, 1, 1, 0.15)
-corner_radius_top_left = 70
-corner_radius_top_right = 70
-corner_radius_bottom_right = 70
-corner_radius_bottom_left = 70
+bg_color = Color(1, 1, 1, 0.12)
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 3
+border_color = Color(1, 1, 1, 0.25)
+corner_radius_top_left = 200
+corner_radius_top_right = 200
+corner_radius_bottom_right = 200
+corner_radius_bottom_left = 200
+corner_detail = 16
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_knob"]
-bg_color = Color(1, 1, 1, 0.4)
-corner_radius_top_left = 30
-corner_radius_top_right = 30
-corner_radius_bottom_right = 30
-corner_radius_bottom_left = 30
+bg_color = Color(1, 1, 1, 0.42)
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 3
+border_color = Color(1, 1, 1, 0.7)
+corner_radius_top_left = 200
+corner_radius_top_right = 200
+corner_radius_bottom_right = 200
+corner_radius_bottom_left = 200
+corner_detail = 16
 
 [node name="VirtualJoystick" type="Control"]
 anchors_preset = -1
@@ -22,12 +34,13 @@ anchor_left = 0.0
 anchor_top = 1.0
 anchor_right = 0.0
 anchor_bottom = 1.0
-offset_left = 40.0
-offset_top = -180.0
-offset_right = 180.0
-offset_bottom = -40.0
+offset_left = 50.0
+offset_top = -270.0
+offset_right = 270.0
+offset_bottom = -50.0
 mouse_filter = 1
 script = ExtResource("1")
+max_distance = 90.0
 
 [node name="Base" type="Panel" parent="."]
 layout_mode = 1
@@ -39,9 +52,9 @@ theme_override_styles/panel = SubResource("StyleBoxFlat_base")
 
 [node name="Knob" type="Panel" parent="Base"]
 layout_mode = 0
-offset_left = 40.0
-offset_top = 40.0
-offset_right = 100.0
-offset_bottom = 100.0
+offset_left = 62.0
+offset_top = 62.0
+offset_right = 158.0
+offset_bottom = 158.0
 mouse_filter = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_knob")

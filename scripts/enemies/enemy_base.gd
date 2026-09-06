@@ -11,7 +11,7 @@ extends CombatActor
 @export var attack_cooldown := 1.0
 @export var telegraph_duration := 0.35
 
-@onready var sprite: Polygon2D = $Shape
+@onready var sprite: ActorShape = $Shape
 
 var _player: Node2D
 var _attack_timer := 0.0
@@ -50,6 +50,9 @@ func _physics_process(delta: float) -> void:
 
 	velocity += consume_knockback(delta)
 	move_and_slide()
+
+	if sprite:
+		sprite.rotation = (_player.global_position - global_position).angle() + PI / 2.0
 
 func _chase() -> void:
 	var to_player := _player.global_position - global_position

@@ -1,37 +1,37 @@
-[gd_scene load_steps=6 format=3]
+[gd_scene load_steps=7 format=3]
 
 [ext_resource type="PackedScene" path="res://scenes/player/Player.tscn" id="1"]
 [ext_resource type="PackedScene" path="res://scenes/enemies/MeleeChaser.tscn" id="2"]
 [ext_resource type="PackedScene" path="res://scenes/ui/Hud.tscn" id="3"]
 [ext_resource type="PackedScene" path="res://scenes/ui/FeelKnobsPanel.tscn" id="4"]
 [ext_resource type="PackedScene" path="res://scenes/world/Obstacle.tscn" id="5"]
+[ext_resource type="Script" path="res://scripts/visuals/grid_background.gd" id="6"]
 
 [node name="Arena" type="Node2D"]
 
-[node name="Background" type="ColorRect" parent="."]
-offset_right = 1080.0
-offset_bottom = 1920.0
-color = Color(0.11, 0.12, 0.1, 1)
+[node name="Background" type="Node2D" parent="."]
+position = Vector2(960, 540)
+script = ExtResource("6")
 
 [node name="Player" parent="." instance=ExtResource("1")]
-position = Vector2(540, 1400)
+position = Vector2(500, 540)
 
 [node name="MeleeChaser" parent="." instance=ExtResource("2")]
-position = Vector2(540, 600)
+position = Vector2(1450, 380)
 
 [node name="MeleeChaser2" parent="." instance=ExtResource("2")]
-position = Vector2(300, 850)
+position = Vector2(1250, 820)
 
 [node name="Obstacle" parent="." instance=ExtResource("5")]
-position = Vector2(700, 1050)
-scale = Vector2(1.5, 0.4)
+position = Vector2(950, 560)
+scale = Vector2(0.4, 2.2)
 
 [node name="Obstacle2" parent="." instance=ExtResource("5")]
-position = Vector2(250, 1150)
-scale = Vector2(0.4, 2.0)
+position = Vector2(1550, 750)
+scale = Vector2(1.8, 0.4)
 
 [node name="Obstacle3" parent="." instance=ExtResource("5")]
-position = Vector2(780, 750)
+position = Vector2(700, 180)
 scale = Vector2(1.2, 1.2)
 
 [node name="Hud" parent="." instance=ExtResource("3")]
