@@ -16,7 +16,8 @@ func _populate() -> void:
 	for skill in DataFolder.list_resources("res://data/skills"):
 		var is_equipped: bool = skill == GameState.equipped_skill
 		var button := Button.new()
-		button.custom_minimum_size = Vector2(0, 90)
+		button.custom_minimum_size = Vector2(0, 130)
+		button.add_theme_font_size_override("font_size", 30)
 		button.text = "%s%s\n%s" % [skill.skill_name, " (equipped)" if is_equipped else "", skill.description]
 		button.disabled = is_equipped
 		button.pressed.connect(_on_skill_selected.bind(skill))

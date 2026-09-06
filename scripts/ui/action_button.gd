@@ -29,6 +29,13 @@ func _ready() -> void:
 	button.focus_mode = Control.FOCUS_NONE
 	cooldown_label.visible = false
 
+func _has_point(point: Vector2) -> bool:
+	# Buttons in the action cluster overlap their square bounding boxes by
+	# design (see Hud.tscn); a true circular hit test is what keeps a tap in
+	# the shared corner from being stolen by the wrong neighbor.
+	var radius := size.x * 0.5
+	return point.distance_to(size * 0.5) <= radius
+
 func _gui_input(event: InputEvent) -> void:
 	if event is InputEventScreenTouch:
 		if event.pressed and _touch_index == -1:

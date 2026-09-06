@@ -24,29 +24,32 @@ anchor_bottom = 1.0
 
 [node name="VBoxContainer" type="VBoxContainer" parent="CenterContainer"]
 layout_mode = 2
-theme_override_constants/separation = 24
+theme_override_constants/separation = 40
 
 [node name="Title" type="Label" parent="CenterContainer/VBoxContainer"]
 layout_mode = 2
-theme_override_font_sizes/font_size = 48
+theme_override_font_sizes/font_size = 100
 horizontal_alignment = 1
 text = "DUNGEON"
 
 [node name="Spacer" type="Control" parent="CenterContainer/VBoxContainer"]
-custom_minimum_size = Vector2(0, 40)
+custom_minimum_size = Vector2(0, 60)
 layout_mode = 2
 
 [node name="StartButton" type="Button" parent="CenterContainer/VBoxContainer"]
-custom_minimum_size = Vector2(320, 90)
+custom_minimum_size = Vector2(560, 140)
 layout_mode = 2
+theme_override_font_sizes/font_size = 40
 text = "Start"
 
 [node name="ArmoryButton" type="Button" parent="CenterContainer/VBoxContainer"]
-custom_minimum_size = Vector2(320, 90)
+custom_minimum_size = Vector2(560, 140)
 layout_mode = 2
+theme_override_font_sizes/font_size = 40
 text = "Armory"
 
 [node name="SkillsButton" type="Button" parent="CenterContainer/VBoxContainer"]
-custom_minimum_size = Vector2(320, 90)
+custom_minimum_size = Vector2(560, 140)
 layout_mode = 2
+theme_override_font_sizes/font_size = 40
 text = "Skills"
