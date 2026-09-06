@@ -1,0 +1,32 @@
+[gd_resource type="Resource" script_class="WeaponData" load_steps=4 format=3]
+
+[ext_resource type="Script" path="res://scripts/data/weapon_data.gd" id="1_wpn"]
+[ext_resource type="Script" path="res://scripts/data/weapon_combo_step_data.gd" id="2_step"]
+
+[sub_resource type="Resource" id="Resource_step1"]
+script = ExtResource("2_step")
+windup = 0.5
+active = 0.15
+recovery = 0.2
+damage = 45.0
+knockback = 100.0
+hitstop = 0.05
+shake = 8.0
+arc_degrees = 100.0
+range = 60.0
+projectile_speed = 380.0
+projectile_radius = 10.0
+pierce = false
+splash_radius = 90.0
+projectile_count = 1
+spread_degrees = 0.0
+
+[resource]
+script = ExtResource("1_wpn")
+weapon_name = "Wand"
+description = "Highest per-hit damage, slow channel. Explodes on impact for splash to nearby enemies."
+kind = 1
+steps = Array[ExtResource("2_step")]([SubResource("Resource_step1")])
+combo_chain_window = 0.25
+cancel_window = 0.5
+cooldown = 0.85

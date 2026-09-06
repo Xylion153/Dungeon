@@ -6,12 +6,15 @@ extends CanvasLayer
 @onready var attack_button: Control = $AttackButton
 @onready var skill_button: Control = $SkillButton
 @onready var dash_button: Control = $DashButton
+@onready var wave_label: Label = $WaveLabel
 
 var _player: Node = null
 
 func _ready() -> void:
 	call_deferred("_bind_player")
 	EventBus.dash_started.connect(_on_dash_started)
+	EventBus.skill_cast.connect(_on_skill_cast)
+	EventBus.wave_started.connect(_on_wave_started)
 
 func _bind_player() -> void:
 	_player = get_tree().get_first_node_in_group("player")
@@ -26,3 +29,10 @@ func _bind_player() -> void:
 func _on_dash_started(actor: Node) -> void:
 	if actor == _player:
 		dash_button.start_cooldown(_player.dash_cooldown)
+
+func _on_skill_cast(actor: Node, cooldown: float) -> void:
+	if actor == _player:
+		skill_button.start_cooldown(cooldown)
+
+func _on_wave_started(wave_number: int) -> void:
+	wave_label.text = "Wave %d" % wave_number

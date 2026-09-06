@@ -1,0 +1,50 @@
+[gd_resource type="Resource" script_class="WeaponData" load_steps=5 format=3]
+
+[ext_resource type="Script" path="res://scripts/data/weapon_data.gd" id="1_wpn"]
+[ext_resource type="Script" path="res://scripts/data/weapon_combo_step_data.gd" id="2_step"]
+
+[sub_resource type="Resource" id="Resource_step1"]
+script = ExtResource("2_step")
+windup = 0.12
+active = 0.1
+recovery = 0.22
+damage = 16.0
+knockback = 110.0
+hitstop = -1.0
+shake = -1.0
+arc_degrees = 30.0
+range = 150.0
+projectile_speed = 500.0
+projectile_radius = 6.0
+pierce = false
+splash_radius = 0.0
+projectile_count = 1
+spread_degrees = 0.0
+
+[sub_resource type="Resource" id="Resource_step2"]
+script = ExtResource("2_step")
+windup = 0.14
+active = 0.1
+recovery = 0.26
+damage = 20.0
+knockback = 140.0
+hitstop = -1.0
+shake = -1.0
+arc_degrees = 35.0
+range = 160.0
+projectile_speed = 500.0
+projectile_radius = 6.0
+pierce = false
+splash_radius = 0.0
+projectile_count = 1
+spread_degrees = 0.0
+
+[resource]
+script = ExtResource("1_wpn")
+weapon_name = "Spear"
+description = "Narrow arc but long reach, hits everyone in the line. Higher per-hit damage than Sword, slower."
+kind = 0
+steps = Array[ExtResource("2_step")]([SubResource("Resource_step1"), SubResource("Resource_step2")])
+combo_chain_window = 0.4
+cancel_window = 0.5
+cooldown = 0.55

@@ -7,6 +7,8 @@ extends CombatActor
 @export var dash_cooldown := 0.9
 
 const SlashEffectScene := preload("res://scenes/combat/SlashEffect.tscn")
+const ProjectileScene := preload("res://scenes/combat/Projectile.tscn")
+const AoeBurstEffectScene := preload("res://scenes/combat/AoeBurstEffect.tscn")
 
 @onready var player_input: PlayerInput = $PlayerInput
 @onready var player_combat: PlayerCombat = $PlayerCombat
@@ -22,6 +24,8 @@ var _is_dashing := false
 var _dash_timer := 0.0
 var _dash_cooldown_timer := 0.0
 var _dash_direction := Vector2.ZERO
+var _skill_cooldown_timer := 0.0
+var _skill_invuln_timer := 0.0
 
 func _ready() -> void:
 	super._ready()
@@ -90,6 +94,11 @@ func _physics_process(delta: float) -> void:
 
 	if _dash_cooldown_timer > 0.0:
 		_dash_cooldown_timer -= delta
+	if _skill_cooldown_timer > 0.0:
+		_skill_cooldown_timer -= delta
+	if _skill_invuln_timer > 0.0:
+		_skill_invuln_timer -= delta
+	set_invulnerable(_is_dashing or _skill_invuln_timer > 0.0)
 
 	if _is_dashing:
 		_dash_timer -= delta
@@ -117,6 +126,8 @@ func _physics_process(delta: float) -> void:
 	if player_input.consume_attack():
 		player_combat.request_attack()
 
+	_try_cast_skill()
+
 func _handle_dash_input() -> void:
 	if _is_dashing:
 		return
@@ -134,12 +145,10 @@ func _start_dash(direction: Vector2) -> void:
 	_dash_timer = dash_duration
 	_dash_cooldown_timer = dash_cooldown
 	_dash_direction = direction
-	set_invulnerable(true)
 	EventBus.dash_started.emit(self)
 
 func _end_dash() -> void:
 	_is_dashing = false
-	set_invulnerable(false)
 	EventBus.dash_ended.emit(self)
 
 func perform_step_hit(step: WeaponComboStepData) -> void:
@@ -180,8 +189,34 @@ func _spawn_slash(step: WeaponComboStepData) -> void:
 	slash.global_position = global_position
 	slash.rotation = facing_direction.angle()
 
-func _do_ranged_hit(_step: WeaponComboStepData) -> void:
-	pass # No ranged weapon is wired up in this pass; Gun/Wand arrive as data + this branch later.
+func _do_ranged_hit(step: WeaponComboStepData) -> void:
+	var parent: Node = get_tree().current_scene
+	if parent == null:
+		return
+
+	var count: int = max(step.projectile_count, 1)
+	var half_spread := deg_to_rad(step.spread_degrees) * 0.5
+	for i in count:
+		var t: float = 0.5 if count <= 1 else float(i) / float(count - 1)
+		var angle_offset: float = lerp(-half_spread, half_spread, t) if count > 1 else 0.0
+		var direction: Vector2 = facing_direction.rotated(angle_offset)
+
+		var projectile := ProjectileScene.instantiate()
+		parent.add_child(projectile)
+		projectile.global_position = global_position
+		projectile.setup({
+			"direction": direction,
+			"speed": step.projectile_speed,
+			"radius": step.projectile_radius,
+			"damage": step.damage,
+			"knockback": step.knockback,
+			"pierce": step.pierce,
+			"splash_radius": step.splash_radius,
+			"target_mask": PhysicsLayers.ENEMY,
+			"crit_chance": stat_sheet.get_stat("crit_chance"),
+			"crit_multiplier": stat_sheet.get_stat("crit_damage"),
+			"color": Color(0.5, 0.85, 1.0) if step.splash_radius <= 0.0 else Color(0.75, 0.4, 1.0),
+		}, self)
 
 func _apply_step_damage(target: Node, step: WeaponComboStepData) -> void:
 	var params := {
@@ -195,3 +230,61 @@ func _apply_step_damage(target: Node, step: WeaponComboStepData) -> void:
 	if step.shake >= 0.0:
 		params["shake"] = step.shake
 	DamageResolver.resolve_hit(self, target, params)
+
+func _try_cast_skill() -> void:
+	if not player_input.consume_skill():
+		return
+	var skill: SkillData = GameState.equipped_skill
+	if skill == null or _skill_cooldown_timer > 0.0:
+		return
+
+	_skill_cooldown_timer = skill.cooldown
+
+	if skill.dash_distance > 0.0:
+		global_position += facing_direction * skill.dash_distance
+
+	if skill.self_invulnerable_duration > 0.0:
+		_skill_invuln_timer = maxf(_skill_invuln_timer, skill.self_invulnerable_duration)
+
+	if skill.damage > 0.0 and skill.radius > 0.0:
+		_cast_aoe(global_position, skill)
+
+	EventBus.skill_cast.emit(self, skill.cooldown)
+
+func _cast_aoe(cast_position: Vector2, skill: SkillData) -> void:
+	var parent: Node = get_tree().current_scene
+	if parent != null:
+		var burst := AoeBurstEffectScene.instantiate()
+		parent.add_child(burst)
+		burst.global_position = cast_position
+		burst.setup(skill.radius, _skill_color(skill))
+
+	var space_state := get_world_2d().direct_space_state
+	var query := PhysicsShapeQueryParameters2D.new()
+	var shape := CircleShape2D.new()
+	shape.radius = skill.radius
+	query.shape = shape
+	query.transform = Transform2D(0, cast_position)
+	query.collision_mask = PhysicsLayers.ENEMY
+	query.collide_with_bodies = true
+	query.collide_with_areas = false
+
+	for result in space_state.intersect_shape(query, 16):
+		var body = result.collider
+		if not (body is CombatActor):
+			continue
+		DamageResolver.resolve_hit(self, body, {
+			"damage": skill.damage,
+			"knockback": 140.0,
+			"crit_chance": stat_sheet.get_stat("crit_chance"),
+			"crit_multiplier": stat_sheet.get_stat("crit_damage"),
+		})
+		if skill.slow_duration > 0.0 and body.has_method("apply_slow"):
+			body.apply_slow(skill.slow_multiplier, skill.slow_duration)
+
+func _skill_color(skill: SkillData) -> Color:
+	if skill.slow_duration > 0.0:
+		return Color(0.5, 0.8, 1.0) # Frost Nova
+	if skill.dash_distance > 0.0:
+		return Color(0.75, 0.4, 1.0) # Blink Strike
+	return Color(1.0, 0.6, 0.25) # Whirlwind

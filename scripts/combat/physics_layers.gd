@@ -5,3 +5,5 @@ extends RefCounted
 const WORLD := 1
 const PLAYER := 2
 const ENEMY := 4
+const PLAYER_PROJECTILE := 8
+const ENEMY_PROJECTILE := 16
