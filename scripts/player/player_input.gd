@@ -9,6 +9,8 @@ var attack_requested := false
 var skill_requested := false
 var dash_requested := false
 
+var _keyboard_active := false
+
 func _physics_process(_delta: float) -> void:
 	var keyboard_vector := Vector2.ZERO
 	if Input.is_key_pressed(KEY_A) or Input.is_key_pressed(KEY_LEFT):
@@ -19,8 +21,16 @@ func _physics_process(_delta: float) -> void:
 		keyboard_vector.y -= 1
 	if Input.is_key_pressed(KEY_S) or Input.is_key_pressed(KEY_DOWN):
 		keyboard_vector.y += 1
+
 	if keyboard_vector != Vector2.ZERO:
 		move_vector = keyboard_vector.normalized()
+		_keyboard_active = true
+	elif _keyboard_active:
+		# All movement keys just released - stop, instead of drifting in the
+		# last held direction. Only touches move_vector while keyboard was
+		# the active source, so it never fights the joystick's own signal.
+		move_vector = Vector2.ZERO
+		_keyboard_active = false
 
 	if Input.is_mouse_button_pressed(MOUSE_BUTTON_LEFT):
 		attack_requested = true
