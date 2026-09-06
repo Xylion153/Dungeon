@@ -41,10 +41,49 @@ func _ready() -> void:
 	CombatFeel.register_camera(camera)
 
 func _on_step_started(index: int, step: WeaponComboStepData) -> void:
+	_acquire_attack_facing(step)
+
 	var steps: Array[WeaponComboStepData] = GameState.equipped_weapon.steps
 	# Alternate the swing side per step so a combo doesn't look like one
 	# motion repeated, and give the final step the heavier animation.
 	weapon_visual.play_swing(step, index % 2 == 1, index == steps.size() - 1)
+
+func _acquire_attack_facing(step: WeaponComboStepData) -> void:
+	# On touch there's no equivalent of mouse-aim, so a player who just holds
+	# still and lets an enemy approach (a completely natural way to play)
+	# would otherwise swing at whatever direction they last moved in - which
+	# usually isn't where the enemy actually is. Re-aim at the nearest enemy
+	# each step, matching the brief: "faces the direction of movement or the
+	# current attack target." Deliberate PC mouse-aim is left alone.
+	if player_input.is_mouse_aiming():
+		return
+
+	var nearest := _find_nearest_enemy(step.range * 1.6)
+	if nearest:
+		facing_direction = (nearest.global_position - global_position).normalized()
+
+func _find_nearest_enemy(search_radius: float) -> Node2D:
+	var space_state := get_world_2d().direct_space_state
+	var query := PhysicsShapeQueryParameters2D.new()
+	var shape := CircleShape2D.new()
+	shape.radius = search_radius
+	query.shape = shape
+	query.transform = Transform2D(0, global_position)
+	query.collision_mask = PhysicsLayers.ENEMY
+	query.collide_with_bodies = true
+	query.collide_with_areas = false
+
+	var nearest: Node2D = null
+	var nearest_dist := INF
+	for result in space_state.intersect_shape(query, 16):
+		var body = result.collider
+		if not (body is CombatActor):
+			continue
+		var dist: float = global_position.distance_to(body.global_position)
+		if dist < nearest_dist:
+			nearest_dist = dist
+			nearest = body
+	return nearest
 
 func _physics_process(delta: float) -> void:
 	_handle_dash_input()
