@@ -11,6 +11,8 @@ const SlashEffectScene := preload("res://scenes/combat/SlashEffect.tscn")
 @onready var player_input: PlayerInput = $PlayerInput
 @onready var player_combat: PlayerCombat = $PlayerCombat
 @onready var sprite: ActorShape = $Shape
+@onready var weapon_pivot: Node2D = $WeaponPivot
+@onready var weapon_visual: WeaponVisual = $WeaponPivot/WeaponVisual
 @onready var camera: Camera2D = $Camera2D
 
 var stat_sheet := StatSheet.new()
@@ -31,8 +33,17 @@ func _ready() -> void:
 	stat_sheet.set_base("crit_damage", 1.5)
 
 	player_combat.setup(self, GameState.equipped_weapon)
+	player_combat.step_started.connect(_on_step_started)
+	weapon_visual.visible = GameState.equipped_weapon.kind == WeaponData.Kind.MELEE
+
 	camera.make_current()
 	CombatFeel.register_camera(camera)
+
+func _on_step_started(index: int, step: WeaponComboStepData) -> void:
+	var steps: Array[WeaponComboStepData] = GameState.equipped_weapon.steps
+	# Alternate the swing side per step so a combo doesn't look like one
+	# motion repeated, and give the final step the heavier animation.
+	weapon_visual.play_swing(step, index % 2 == 1, index == steps.size() - 1)
 
 func _physics_process(delta: float) -> void:
 	_handle_dash_input()
@@ -59,7 +70,9 @@ func _physics_process(delta: float) -> void:
 			facing_direction = to_mouse.normalized()
 
 	move_and_slide()
-	sprite.rotation = facing_direction.angle() + PI / 2.0
+	var facing_rotation := facing_direction.angle() + PI / 2.0
+	sprite.rotation = facing_rotation
+	weapon_pivot.rotation = facing_rotation
 
 	if player_input.consume_attack():
 		player_combat.request_attack()

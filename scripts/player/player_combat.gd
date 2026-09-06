@@ -6,7 +6,7 @@ extends Node
 ## than restarting anything — this is the explicit mash-proofing the brief
 ## calls out as a real bug worth guarding against.
 
-signal step_started(step_index: int)
+signal step_started(step_index: int, step: WeaponComboStepData)
 
 enum State { IDLE, WINDUP, ACTIVE, RECOVERY, COOLDOWN }
 
@@ -49,7 +49,7 @@ func _start_step(index: int) -> void:
 	state = State.WINDUP
 	state_timer = step.windup
 	chain_buffered = false
-	step_started.emit(index)
+	step_started.emit(index, step)
 
 func _process(delta: float) -> void:
 	if weapon == null or weapon.steps.is_empty():
