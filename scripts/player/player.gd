@@ -12,7 +12,7 @@ const AoeBurstEffectScene := preload("res://scenes/combat/AoeBurstEffect.tscn")
 
 @onready var player_input: PlayerInput = $PlayerInput
 @onready var player_combat: PlayerCombat = $PlayerCombat
-@onready var sprite: ActorShape = $Shape
+@onready var sprite: AnimatedSprite2D = $Shape
 @onready var weapon_pivot: Node2D = $WeaponPivot
 @onready var weapon_visual: WeaponVisual = $WeaponPivot/WeaponVisual
 @onready var camera: Camera2D = $Camera2D
@@ -39,7 +39,11 @@ func _ready() -> void:
 
 	player_combat.setup(self, GameState.equipped_weapon)
 	player_combat.step_started.connect(_on_step_started)
-	weapon_visual.visible = GameState.equipped_weapon.kind == WeaponData.Kind.MELEE
+	# The real character sprite already shows a held sword in every frame, so
+	# the procedural floating-blade visual would be redundant. It stays wired
+	# up (attack animation frames aren't ready yet) for a possible future
+	# weapon that needs its own held-weapon visual.
+	weapon_visual.visible = false
 
 	camera.make_current()
 	CombatFeel.register_camera(camera)
@@ -119,14 +123,34 @@ func _physics_process(delta: float) -> void:
 			facing_direction = to_mouse.normalized()
 
 	move_and_slide()
-	var facing_rotation := facing_direction.angle() + PI / 2.0
-	sprite.rotation = facing_rotation
-	weapon_pivot.rotation = facing_rotation
+	weapon_pivot.rotation = facing_direction.angle() + PI / 2.0
+	_update_sprite_animation(player_input.move_vector)
 
 	if player_input.consume_attack():
 		player_combat.request_attack()
 
 	_try_cast_skill()
+
+func _update_sprite_animation(move_vector: Vector2) -> void:
+	# Driven by actual movement input, not facing_direction - facing can be
+	# aimed at a target (mouse-aim, or the attack auto-target) independently
+	# of which way the player is walking, and the sprite should show the
+	# latter. The sheet only has one idle pose (facing down), so idling while
+	# last facing another direction just returns to that - a known
+	# simplification until more idle directions exist.
+	if move_vector == Vector2.ZERO:
+		if sprite.animation != "idle":
+			sprite.play("idle")
+		return
+
+	var anim_name: String
+	if absf(move_vector.x) > absf(move_vector.y):
+		anim_name = "walk_right" if move_vector.x > 0.0 else "walk_left"
+	else:
+		anim_name = "walk_down" if move_vector.y > 0.0 else "walk_up"
+
+	if sprite.animation != anim_name:
+		sprite.play(anim_name)
 
 func _handle_dash_input() -> void:
 	if _is_dashing:
