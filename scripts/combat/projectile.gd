@@ -35,6 +35,13 @@ func setup(params: Dictionary, attacker: Node = null) -> void:
 	_attacker = attacker
 	rotation = direction.angle()
 
+	# _ready() already ran (add_child() calls it synchronously, before this),
+	# so it locked collision_mask to the class-default target_mask. Re-apply
+	# it here now that target_mask reflects what the caller actually asked
+	# for - otherwise an enemy's own shot (target_mask=PLAYER) keeps the
+	# stale ENEMY-layer mask and detects the shooter itself on spawn.
+	collision_mask = target_mask | PhysicsLayers.WORLD
+
 	var radius: float = params.get("radius", 6.0)
 	if shape and shape.shape is CircleShape2D:
 		shape.shape.radius = radius
@@ -74,7 +81,7 @@ func _resolve_hit() -> void:
 		_splash_damage()
 	else:
 		var closest: Node = _hit_bodies[_hit_bodies.size() - 1]
-		DamageResolver.resolve_hit(_attacker, closest, _damage_params())
+		DamageResolver.resolve_hit(_attacker_or_null(), closest, _damage_params())
 
 func _splash_damage() -> void:
 	var space_state := get_world_2d().direct_space_state
@@ -86,10 +93,18 @@ func _splash_damage() -> void:
 	query.collision_mask = target_mask
 	query.collide_with_bodies = true
 	query.collide_with_areas = false
+	var attacker := _attacker_or_null()
 	for result in space_state.intersect_shape(query, 16):
 		var body = result.collider
 		if body is CombatActor:
-			DamageResolver.resolve_hit(_attacker, body, _damage_params())
+			DamageResolver.resolve_hit(attacker, body, _damage_params())
+
+func _attacker_or_null() -> Node:
+	# The enemy/player that fired this can die before the shot lands (e.g.
+	# the player kills a ranged enemy right after it shoots) - resolve_hit()
+	# would otherwise be called with a freed reference and crash the typed
+	# argument check.
+	return _attacker if is_instance_valid(_attacker) else null
 
 func _damage_params() -> Dictionary:
 	return {
