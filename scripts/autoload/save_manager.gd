@@ -8,7 +8,7 @@ const SAVE_PATH := "user://save.json"
 
 signal leveled_up(class_id: String, new_level: int)
 
-var _data: Dictionary = {"current_class_id": "", "classes": {}, "credits": 0, "inventory": []}
+var _data: Dictionary = {"current_class_id": "", "classes": {}, "credits": 0, "inventory": [], "artifact_inventory": []}
 
 func _ready() -> void:
 	_load()
@@ -67,6 +67,23 @@ func remove_from_inventory(index: int) -> void:
 		inventory.remove_at(index)
 		_save()
 
+func add_artifact_to_inventory(piece: ArtifactPieceData) -> void:
+	var inventory: Array = _data["artifact_inventory"]
+	inventory.append(piece.to_dict())
+	_save()
+
+func get_artifact_inventory() -> Array[ArtifactPieceData]:
+	var pieces: Array[ArtifactPieceData] = []
+	for entry in _data.get("artifact_inventory", []):
+		pieces.append(ArtifactPieceData.from_dict(entry))
+	return pieces
+
+func remove_artifact_from_inventory(index: int) -> void:
+	var inventory: Array = _data["artifact_inventory"]
+	if index >= 0 and index < inventory.size():
+		inventory.remove_at(index)
+		_save()
+
 func _load() -> void:
 	if not FileAccess.file_exists(SAVE_PATH):
 		return
@@ -82,6 +99,8 @@ func _load() -> void:
 			_data["credits"] = 0
 		if not _data.has("inventory"):
 			_data["inventory"] = []
+		if not _data.has("artifact_inventory"):
+			_data["artifact_inventory"] = []
 
 func _save() -> void:
 	var file := FileAccess.open(SAVE_PATH, FileAccess.WRITE)

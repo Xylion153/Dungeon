@@ -21,6 +21,7 @@ CombatFeel="*res://scripts/autoload/combat_feel.gd"
 DamageResolver="*res://scripts/autoload/damage_resolver.gd"
 SaveManager="*res://scripts/autoload/save_manager.gd"
 GearManager="*res://scripts/autoload/gear_manager.gd"
+ArtifactManager="*res://scripts/autoload/artifact_manager.gd"
 LootDropper="*res://scripts/autoload/loot_dropper.gd"
 GameState="*res://scripts/autoload/game_state.gd"
 

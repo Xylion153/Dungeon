@@ -6,6 +6,7 @@ var current_class: ClassData = null
 var equipped_weapon: WeaponData = null
 var equipped_skill: SkillData = null
 var run_loot: Array[GearPieceData] = [] ## gear collected THIS run - banked to SaveManager's inventory on death, not equipped mid-run
+var run_artifact_loot: Array[ArtifactPieceData] = [] ## same idea as run_loot, for Artifacts
 
 func select_class(class_data: ClassData) -> void:
 	current_class = class_data

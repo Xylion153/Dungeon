@@ -49,6 +49,7 @@ func _ready() -> void:
 	_refresh_stats() # first call: old_max == max_health, so this lands at full health/mana
 
 	GearManager.gear_changed.connect(_refresh_stats)
+	ArtifactManager.artifacts_changed.connect(_refresh_stats)
 	player_combat.setup(self, GameState.equipped_weapon)
 	player_combat.step_started.connect(_on_step_started)
 	# The real character sprite already shows a held sword in every frame, so
@@ -65,6 +66,7 @@ func _refresh_stats() -> void:
 	if GameState.current_class:
 		modifiers.append_array(GameState.current_class.stat_modifiers)
 	modifiers.append_array(GearManager.get_all_modifiers())
+	modifiers.append_array(ArtifactManager.get_all_modifiers())
 	stat_sheet.set_modifiers(modifiers)
 
 	# A mid-run gear change must not full-heal or overkill on a max-health

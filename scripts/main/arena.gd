@@ -35,4 +35,7 @@ func _on_player_died() -> void:
 	for piece in GameState.run_loot:
 		SaveManager.add_to_inventory(piece)
 	GameState.run_loot.clear()
+	for piece in GameState.run_artifact_loot:
+		SaveManager.add_artifact_to_inventory(piece)
+	GameState.run_artifact_loot.clear()
 	game_over_screen.show_result(current_wave)

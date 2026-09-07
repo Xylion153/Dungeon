@@ -4,7 +4,7 @@ extends Area2D
 ## Auto-despawns after MAX_LIFETIME if never collected, so a cleared arena
 ## doesn't accumulate forever-uncollected clutter.
 
-enum Kind { CREDITS, HEALTH, MANA, GEAR }
+enum Kind { CREDITS, HEALTH, MANA, GEAR, ARTIFACT }
 
 const PickupTextScene := preload("res://scenes/combat/PickupText.tscn")
 const MAX_LIFETIME := 20.0
@@ -18,6 +18,7 @@ const RARITY_COLORS := [
 var kind: Kind = Kind.CREDITS
 var amount: float = 0.0
 var gear_piece: GearPieceData
+var artifact_piece: ArtifactPieceData
 
 @onready var shape_visual: Polygon2D = $Visual
 @onready var collision: CollisionShape2D = $CollisionShape2D
@@ -42,6 +43,11 @@ func setup_gear(piece: GearPieceData) -> void:
 	gear_piece = piece
 	_apply_visual(RARITY_COLORS[piece.rarity], _diamond_polygon(12.0))
 
+func setup_artifact(piece: ArtifactPieceData) -> void:
+	kind = Kind.ARTIFACT
+	artifact_piece = piece
+	_apply_visual(RARITY_COLORS[piece.rarity], _star_polygon(12.0, 5.0))
+
 func _apply_visual(color: Color, polygon: PackedVector2Array) -> void:
 	shape_visual.color = color
 	shape_visual.polygon = polygon
@@ -63,6 +69,14 @@ func _cross_polygon(size: float) -> PackedVector2Array:
 
 func _diamond_polygon(size: float) -> PackedVector2Array:
 	return PackedVector2Array([Vector2(0, -size), Vector2(size, 0), Vector2(0, size), Vector2(-size, 0)])
+
+func _star_polygon(outer_radius: float, inner_radius: float) -> PackedVector2Array:
+	var points := PackedVector2Array()
+	for i in 10:
+		var angle: float = TAU * i / 10.0 - PI / 2.0
+		var radius: float = outer_radius if i % 2 == 0 else inner_radius
+		points.append(Vector2(cos(angle), sin(angle)) * radius)
+	return points
 
 func _ready() -> void:
 	collision_layer = 0
@@ -99,6 +113,9 @@ func _collect(player: Node) -> void:
 		Kind.GEAR:
 			GameState.run_loot.append(gear_piece)
 			_spawn_text(gear_piece.piece_name, RARITY_COLORS[gear_piece.rarity])
+		Kind.ARTIFACT:
+			GameState.run_artifact_loot.append(artifact_piece)
+			_spawn_text(artifact_piece.piece_name, RARITY_COLORS[artifact_piece.rarity])
 
 func _spawn_text(text: String, color: Color) -> void:
 	var parent: Node = get_tree().current_scene

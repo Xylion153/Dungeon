@@ -10,12 +10,14 @@ const REGULAR_RATES := {
 	"health": {"chance": 0.12, "min": 15, "max": 25},
 	"mana": {"chance": 0.12, "min": 10, "max": 20},
 	"gear": {"chance": 0.08},
+	"artifact": {"chance": 0.08},
 }
 const BOSS_RATES := {
 	"credits": {"chance": 1.0, "min": 80, "max": 150},
 	"health": {"chance": 0.4, "min": 15, "max": 25},
 	"mana": {"chance": 0.4, "min": 10, "max": 20},
 	"gear": {"chance": 1.0},
+	"artifact": {"chance": 1.0},
 }
 
 func _ready() -> void:
@@ -43,6 +45,10 @@ func _on_enemy_killed(_attacker: Node, enemy: Node, _killing_blow_damage: float)
 	if randf() < rates["gear"]["chance"]:
 		var piece := GearRoller.roll_piece()
 		_spawn(position, func(p): p.setup_gear(piece))
+
+	if randf() < rates["artifact"]["chance"]:
+		var artifact_piece := ArtifactRoller.roll_piece()
+		_spawn(position, func(p): p.setup_artifact(artifact_piece))
 
 func _spawn(position: Vector2, configure: Callable) -> void:
 	var tree := Engine.get_main_loop() as SceneTree
