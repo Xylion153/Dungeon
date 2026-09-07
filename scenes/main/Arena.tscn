@@ -1,4 +1,4 @@
-[gd_scene load_steps=14 format=3]
+[gd_scene load_steps=13 format=3]
 
 [ext_resource type="Script" path="res://scripts/main/arena.gd" id="0"]
 [ext_resource type="PackedScene" path="res://scenes/player/Player.tscn" id="1"]
@@ -13,7 +13,6 @@
 [ext_resource type="PackedScene" path="res://scenes/enemies/BossEnemy.tscn" id="10"]
 [ext_resource type="PackedScene" path="res://scenes/ui/BossHealthBar.tscn" id="11"]
 [ext_resource type="PackedScene" path="res://scenes/ui/GameOverScreen.tscn" id="12"]
-[ext_resource type="PackedScene" path="res://scenes/ui/LootOfferScreen.tscn" id="13"]
 
 [node name="Arena" type="Node2D"]
 script = ExtResource("0")
@@ -50,5 +49,3 @@ boss_wave = 5
 [node name="BossHealthBar" parent="." instance=ExtResource("11")]
 
 [node name="GameOverScreen" parent="." instance=ExtResource("12")]
-
-[node name="LootOfferScreen" parent="." instance=ExtResource("13")]

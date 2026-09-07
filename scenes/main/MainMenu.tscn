@@ -60,6 +60,12 @@ layout_mode = 2
 theme_override_font_sizes/font_size = 40
 text = "Skills"
 
+[node name="GearButton" type="Button" parent="CenterContainer/VBoxContainer"]
+custom_minimum_size = Vector2(560, 140)
+layout_mode = 2
+theme_override_font_sizes/font_size = 40
+text = "Gear"
+
 [node name="ChangeClassButton" type="Button" parent="CenterContainer/VBoxContainer"]
 custom_minimum_size = Vector2(560, 100)
 layout_mode = 2

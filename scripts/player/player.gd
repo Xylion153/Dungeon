@@ -28,6 +28,8 @@ var _skill_cooldown_timer := 0.0
 var _skill_invuln_timer := 0.0
 var _pierce_timer := 0.0
 var _base_max_health := 0.0
+var mana := 0.0
+var max_mana := 0.0
 
 func _ready() -> void:
 	super._ready()
@@ -42,7 +44,9 @@ func _ready() -> void:
 	stat_sheet.set_base("max_health", _base_max_health)
 	stat_sheet.set_base("damage_multiplier", 1.0)
 	stat_sheet.set_base("attack_speed_multiplier", 1.0)
-	_refresh_stats() # first call: old_max == max_health, so this lands at full health
+	stat_sheet.set_base("max_mana", 50.0)
+	stat_sheet.set_base("mana_regen_per_second", 2.0)
+	_refresh_stats() # first call: old_max == max_health, so this lands at full health/mana
 
 	GearManager.gear_changed.connect(_refresh_stats)
 	player_combat.setup(self, GameState.equipped_weapon)
@@ -70,11 +74,18 @@ func _refresh_stats() -> void:
 	if old_max > 0.0:
 		health = clampf(health + (max_health - old_max), 1.0, max_health)
 
+	var old_max_mana := max_mana
+	max_mana = stat_sheet.get_stat("max_mana")
+	mana = clampf(mana + (max_mana - old_max_mana), 0.0, max_mana)
+
 func get_attack_speed_multiplier() -> float:
 	return stat_sheet.get_stat("attack_speed_multiplier")
 
 func grant_temporary_pierce(duration: float) -> void:
 	_pierce_timer = maxf(_pierce_timer, duration)
+
+func restore_mana(amount: float) -> void:
+	mana = minf(mana + amount, max_mana)
 
 func _on_step_started(index: int, step: WeaponComboStepData) -> void:
 	_acquire_attack_facing(step)
@@ -133,6 +144,8 @@ func _physics_process(delta: float) -> void:
 	if _pierce_timer > 0.0:
 		_pierce_timer -= delta
 	set_invulnerable(_is_dashing or _skill_invuln_timer > 0.0)
+
+	mana = minf(mana + stat_sheet.get_stat("mana_regen_per_second") * delta, max_mana)
 
 	if _is_dashing:
 		_dash_timer -= delta
@@ -289,10 +302,11 @@ func _try_cast_skill() -> void:
 	if not player_input.consume_skill():
 		return
 	var skill: SkillData = GameState.equipped_skill
-	if skill == null or _skill_cooldown_timer > 0.0:
+	if skill == null or _skill_cooldown_timer > 0.0 or mana < skill.mana_cost:
 		return
 
 	_skill_cooldown_timer = skill.cooldown
+	mana -= skill.mana_cost
 
 	if skill.dash_distance > 0.0:
 		global_position += facing_direction * skill.dash_distance

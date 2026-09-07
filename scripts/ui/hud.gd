@@ -8,6 +8,7 @@ extends CanvasLayer
 @onready var dash_button: Control = $DashButton
 @onready var wave_label: Label = $WaveLabel
 @onready var level_label: Label = $LevelLabel
+@onready var mana_label: Label = $ManaLabel
 
 var _player: Node = null
 
@@ -21,6 +22,12 @@ func _ready() -> void:
 	if GameState.current_class:
 		var progress := SaveManager.get_class_progress(GameState.current_class.id)
 		level_label.text = "Lv. %d" % progress["level"]
+
+func _process(_delta: float) -> void:
+	# Mana regenerates continuously, so this is polled rather than
+	# event-driven - there's no natural "mana changed" signal to hook.
+	if _player and is_instance_valid(_player):
+		mana_label.text = "Mana: %d/%d" % [int(_player.mana), int(_player.max_mana)]
 
 func _bind_player() -> void:
 	_player = get_tree().get_first_node_in_group("player")

@@ -9,6 +9,7 @@ description = "Weaker AoE damage, but slows everything it hits for a few seconds
 damage = 15.0
 radius = 120.0
 cooldown = 6.0
+mana_cost = 30.0
 self_invulnerable_duration = 0.0
 slow_duration = 3.0
 slow_multiplier = 0.5

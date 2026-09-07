@@ -22,13 +22,17 @@ var _resolving_stormrend := false
 
 var _active_four_piece_sets: Dictionary = {} # set_id -> true, only while connected
 
-func equip(piece: GearPieceData) -> void:
+func equip(piece: GearPieceData) -> GearPieceData:
+	var previous: GearPieceData = equipped_pieces[piece.slot]
 	equipped_pieces[piece.slot] = piece
 	_refresh()
+	return previous
 
-func unequip(slot: int) -> void:
+func unequip(slot: int) -> GearPieceData:
+	var previous: GearPieceData = equipped_pieces[slot]
 	equipped_pieces[slot] = null
 	_refresh()
+	return previous
 
 func get_all_modifiers() -> Array[StatModifierData]:
 	var modifiers: Array[StatModifierData] = []

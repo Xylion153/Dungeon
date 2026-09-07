@@ -9,6 +9,7 @@ description = "Short forward teleport with i-frames, deals AoE damage on landing
 damage = 20.0
 radius = 60.0
 cooldown = 5.0
+mana_cost = 20.0
 self_invulnerable_duration = 0.2
 slow_duration = 0.0
 slow_multiplier = 1.0

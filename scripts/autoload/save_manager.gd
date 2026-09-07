@@ -8,7 +8,7 @@ const SAVE_PATH := "user://save.json"
 
 signal leveled_up(class_id: String, new_level: int)
 
-var _data: Dictionary = {"current_class_id": "", "classes": {}}
+var _data: Dictionary = {"current_class_id": "", "classes": {}, "credits": 0, "inventory": []}
 
 func _ready() -> void:
 	_load()
@@ -43,6 +43,30 @@ func set_current_class_id(class_id: String) -> void:
 func get_current_class_id() -> String:
 	return _data.get("current_class_id", "")
 
+func add_credits(amount: int) -> void:
+	_data["credits"] = int(_data.get("credits", 0)) + amount
+	_save()
+
+func get_credits() -> int:
+	return int(_data.get("credits", 0))
+
+func add_to_inventory(piece: GearPieceData) -> void:
+	var inventory: Array = _data["inventory"]
+	inventory.append(piece.to_dict())
+	_save()
+
+func get_inventory() -> Array[GearPieceData]:
+	var pieces: Array[GearPieceData] = []
+	for entry in _data.get("inventory", []):
+		pieces.append(GearPieceData.from_dict(entry))
+	return pieces
+
+func remove_from_inventory(index: int) -> void:
+	var inventory: Array = _data["inventory"]
+	if index >= 0 and index < inventory.size():
+		inventory.remove_at(index)
+		_save()
+
 func _load() -> void:
 	if not FileAccess.file_exists(SAVE_PATH):
 		return
@@ -54,6 +78,10 @@ func _load() -> void:
 		_data = parsed
 		if not _data.has("classes"):
 			_data["classes"] = {}
+		if not _data.has("credits"):
+			_data["credits"] = 0
+		if not _data.has("inventory"):
+			_data["inventory"] = []
 
 func _save() -> void:
 	var file := FileAccess.open(SAVE_PATH, FileAccess.WRITE)

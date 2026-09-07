@@ -9,6 +9,7 @@ description = "Instant AoE damage around the player, brief self-invulnerability.
 damage = 25.0
 radius = 100.0
 cooldown = 4.0
+mana_cost = 25.0
 self_invulnerable_duration = 0.3
 slow_duration = 0.0
 slow_multiplier = 1.0

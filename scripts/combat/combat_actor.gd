@@ -31,6 +31,9 @@ func take_damage(amount: float) -> void:
 	if health <= 0.0:
 		die()
 
+func heal(amount: float) -> void:
+	health = minf(health + amount, max_health)
+
 func apply_knockback(impulse: Vector2) -> void:
 	_knockback_velocity = impulse
 

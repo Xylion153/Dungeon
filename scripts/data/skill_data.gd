@@ -7,6 +7,7 @@ extends Resource
 @export var damage := 0.0
 @export var radius := 0.0
 @export var cooldown := 5.0
+@export var mana_cost := 0.0
 @export var self_invulnerable_duration := 0.0
 @export var slow_duration := 0.0
 @export var slow_multiplier := 1.0
