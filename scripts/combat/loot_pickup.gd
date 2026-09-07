@@ -4,7 +4,7 @@ extends Area2D
 ## Auto-despawns after MAX_LIFETIME if never collected, so a cleared arena
 ## doesn't accumulate forever-uncollected clutter.
 
-enum Kind { CREDITS, HEALTH, MANA, GEAR, ARTIFACT }
+enum Kind { CREDITS, HEALTH, MANA, GEAR, ARTIFACT, GEMS }
 
 const PickupTextScene := preload("res://scenes/combat/PickupText.tscn")
 const MAX_LIFETIME := 20.0
@@ -47,6 +47,11 @@ func setup_artifact(piece: ArtifactPieceData) -> void:
 	kind = Kind.ARTIFACT
 	artifact_piece = piece
 	_apply_visual(RARITY_COLORS[piece.rarity], _star_polygon(12.0, 5.0))
+
+func setup_gems(value: int) -> void:
+	kind = Kind.GEMS
+	amount = value
+	_apply_visual(Color(0.4, 0.85, 1.0), _star_polygon(10.0, 4.5))
 
 func _apply_visual(color: Color, polygon: PackedVector2Array) -> void:
 	shape_visual.color = color
@@ -116,6 +121,9 @@ func _collect(player: Node) -> void:
 		Kind.ARTIFACT:
 			GameState.run_artifact_loot.append(artifact_piece)
 			_spawn_text(artifact_piece.piece_name, RARITY_COLORS[artifact_piece.rarity])
+		Kind.GEMS:
+			SaveManager.add_gems(int(amount))
+			_spawn_text("+%d Gems" % int(amount), Color(0.4, 0.85, 1.0))
 
 func _spawn_text(text: String, color: Color) -> void:
 	var parent: Node = get_tree().current_scene

@@ -34,3 +34,13 @@ func _populate() -> void:
 		get_tree().change_scene_to_file("res://scenes/main/RaidArena.tscn")
 	)
 	card_list.add_child(raid_button)
+
+	var dungeon_button := Button.new()
+	dungeon_button.custom_minimum_size = Vector2(0, 130)
+	dungeon_button.add_theme_font_size_override("font_size", 30)
+	dungeon_button.text = "The Depths\nA winding procedural dungeon - clear every room to reach the boss."
+	dungeon_button.pressed.connect(func():
+		GameState.apply_run_buffs()
+		get_tree().change_scene_to_file("res://scenes/main/DungeonLevel.tscn")
+	)
+	card_list.add_child(dungeon_button)
