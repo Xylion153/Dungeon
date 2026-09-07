@@ -4,6 +4,12 @@ extends CharacterBody2D
 ## combat, so none of Player's weapon/health/skill machinery applies here.
 
 @export var move_speed := 260.0
+## Keeps the player on the plaza's walkable stone floor - Town's background is
+## one fixed painted diorama (not a scrolling tileset), so this is a plain
+## rectangle eyeballed against that art rather than real per-building
+## collision against its irregular silhouette.
+@export var bounds_min := Vector2(220, 150)
+@export var bounds_max := Vector2(1700, 900)
 
 @onready var player_input: PlayerInput = $PlayerInput
 @onready var sprite: AnimatedSprite2D = $Shape
@@ -21,6 +27,7 @@ func _physics_process(_delta: float) -> void:
 		move_vector = move_vector.normalized()
 	velocity = move_vector * move_speed
 	move_and_slide()
+	global_position = global_position.clamp(bounds_min, bounds_max)
 	_update_sprite_animation(move_vector)
 
 func _update_sprite_animation(move_vector: Vector2) -> void:
