@@ -20,6 +20,7 @@ EventBus="*res://scripts/autoload/event_bus.gd"
 CombatFeel="*res://scripts/autoload/combat_feel.gd"
 DamageResolver="*res://scripts/autoload/damage_resolver.gd"
 SaveManager="*res://scripts/autoload/save_manager.gd"
+GearManager="*res://scripts/autoload/gear_manager.gd"
 GameState="*res://scripts/autoload/game_state.gd"
 
 [display]

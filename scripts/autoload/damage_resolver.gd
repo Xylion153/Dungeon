@@ -43,7 +43,7 @@ func resolve_hit(attacker: Node, target: Node, params: Dictionary) -> void:
 
 	if target.has_method("get_health") and target.get_health() <= 0.0:
 		CombatFeel.apply_shake(CombatFeel.shake_kill)
-		EventBus.enemy_killed.emit(attacker, target)
+		EventBus.enemy_killed.emit(attacker, target, final_damage)
 
 func _spawn_damage_number(target: Node, amount: float, is_crit: bool) -> void:
 	if not (target is Node2D) or not is_instance_valid(target):

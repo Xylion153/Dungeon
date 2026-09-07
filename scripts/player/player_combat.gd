@@ -24,6 +24,8 @@ func setup(actor: Node2D, weapon_data: WeaponData) -> void:
 	weapon = weapon_data
 
 func request_attack() -> void:
+	if weapon == null or weapon.steps.is_empty():
+		return # no weapon equipped (e.g. Arena loaded directly, skipping Class Select)
 	match state:
 		State.IDLE:
 			_start_step(0)
@@ -47,9 +49,14 @@ func _start_step(index: int) -> void:
 	current_step = index
 	var step := weapon.steps[index]
 	state = State.WINDUP
-	state_timer = step.windup
+	state_timer = step.windup / _attack_speed_multiplier()
 	chain_buffered = false
 	step_started.emit(index, step)
+
+func _attack_speed_multiplier() -> float:
+	if _actor.has_method("get_attack_speed_multiplier"):
+		return maxf(_actor.get_attack_speed_multiplier(), 0.01)
+	return 1.0
 
 func _process(delta: float) -> void:
 	if weapon == null or weapon.steps.is_empty():
@@ -80,14 +87,14 @@ func _process(delta: float) -> void:
 func _enter_active() -> void:
 	var step := weapon.steps[current_step]
 	state = State.ACTIVE
-	state_timer = step.active
+	state_timer = step.active / _attack_speed_multiplier()
 	if _actor.has_method("perform_step_hit"):
 		_actor.perform_step_hit(step)
 
 func _enter_recovery() -> void:
 	var step := weapon.steps[current_step]
 	state = State.RECOVERY
-	state_timer = step.recovery
+	state_timer = step.recovery / _attack_speed_multiplier()
 	chain_window_timer = weapon.combo_chain_window
 
 func _finish_recovery() -> void:
@@ -97,7 +104,7 @@ func _finish_recovery() -> void:
 		return
 	if is_last_step:
 		state = State.COOLDOWN
-		state_timer = weapon.cooldown
+		state_timer = weapon.cooldown / _attack_speed_multiplier()
 	else:
 		state = State.IDLE
 		current_step = 0

@@ -26,6 +26,8 @@ var _dash_cooldown_timer := 0.0
 var _dash_direction := Vector2.ZERO
 var _skill_cooldown_timer := 0.0
 var _skill_invuln_timer := 0.0
+var _pierce_timer := 0.0
+var _base_max_health := 0.0
 
 func _ready() -> void:
 	super._ready()
@@ -33,16 +35,16 @@ func _ready() -> void:
 	collision_layer = PhysicsLayers.PLAYER
 	collision_mask = PhysicsLayers.WORLD
 
+	_base_max_health = max_health
 	stat_sheet.set_base("move_speed", move_speed)
 	stat_sheet.set_base("crit_chance", 0.05)
 	stat_sheet.set_base("crit_damage", 1.5)
-	stat_sheet.set_base("max_health", max_health)
+	stat_sheet.set_base("max_health", _base_max_health)
 	stat_sheet.set_base("damage_multiplier", 1.0)
-	if GameState.current_class:
-		stat_sheet.set_modifiers(GameState.current_class.stat_modifiers)
-	max_health = stat_sheet.get_stat("max_health")
-	health = max_health
+	stat_sheet.set_base("attack_speed_multiplier", 1.0)
+	_refresh_stats() # first call: old_max == max_health, so this lands at full health
 
+	GearManager.gear_changed.connect(_refresh_stats)
 	player_combat.setup(self, GameState.equipped_weapon)
 	player_combat.step_started.connect(_on_step_started)
 	# The real character sprite already shows a held sword in every frame, so
@@ -53,6 +55,26 @@ func _ready() -> void:
 
 	camera.make_current()
 	CombatFeel.register_camera(camera)
+
+func _refresh_stats() -> void:
+	var modifiers: Array[StatModifierData] = []
+	if GameState.current_class:
+		modifiers.append_array(GameState.current_class.stat_modifiers)
+	modifiers.append_array(GearManager.get_all_modifiers())
+	stat_sheet.set_modifiers(modifiers)
+
+	# A mid-run gear change must not full-heal or overkill on a max-health
+	# swing - shift current health by the delta instead of resetting it.
+	var old_max := max_health
+	max_health = stat_sheet.get_stat("max_health")
+	if old_max > 0.0:
+		health = clampf(health + (max_health - old_max), 1.0, max_health)
+
+func get_attack_speed_multiplier() -> float:
+	return stat_sheet.get_stat("attack_speed_multiplier")
+
+func grant_temporary_pierce(duration: float) -> void:
+	_pierce_timer = maxf(_pierce_timer, duration)
 
 func _on_step_started(index: int, step: WeaponComboStepData) -> void:
 	_acquire_attack_facing(step)
@@ -108,6 +130,8 @@ func _physics_process(delta: float) -> void:
 		_skill_cooldown_timer -= delta
 	if _skill_invuln_timer > 0.0:
 		_skill_invuln_timer -= delta
+	if _pierce_timer > 0.0:
+		_pierce_timer -= delta
 	set_invulnerable(_is_dashing or _skill_invuln_timer > 0.0)
 
 	if _is_dashing:
@@ -240,7 +264,7 @@ func _do_ranged_hit(step: WeaponComboStepData) -> void:
 			"radius": step.projectile_radius,
 			"damage": step.damage * stat_sheet.get_stat("damage_multiplier"),
 			"knockback": step.knockback,
-			"pierce": step.pierce,
+			"pierce": step.pierce or _pierce_timer > 0.0,
 			"splash_radius": step.splash_radius,
 			"target_mask": PhysicsLayers.ENEMY,
 			"crit_chance": stat_sheet.get_stat("crit_chance"),

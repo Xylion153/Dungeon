@@ -4,7 +4,7 @@ extends Node
 ## effect can outlive its gear (brief section 9).
 
 signal crit_landed(attacker: Node, target: Node, damage: float)
-signal enemy_killed(attacker: Node, enemy: Node)
+signal enemy_killed(attacker: Node, enemy: Node, killing_blow_damage: float)
 signal dash_started(actor: Node)
 signal dash_ended(actor: Node)
 signal damage_dealt(attacker: Node, target: Node, damage: float, is_crit: bool)

@@ -16,6 +16,10 @@ var _telegraphing := false
 var _telegraph_timer := 0.0
 var _slow_multiplier := 1.0
 var _slow_timer := 0.0
+var _burn_damage_per_tick := 0.0
+var _burn_tick_interval := 1.0
+var _burn_tick_timer := 0.0
+var _burn_ticks_remaining := 0
 
 func _ready() -> void:
 	super._ready()
@@ -35,6 +39,15 @@ func _physics_process(delta: float) -> void:
 		_slow_timer -= delta
 		if _slow_timer <= 0.0:
 			_slow_multiplier = 1.0
+
+	if _burn_ticks_remaining > 0:
+		_burn_tick_timer -= delta
+		if _burn_tick_timer <= 0.0:
+			_burn_tick_timer += _burn_tick_interval
+			_burn_ticks_remaining -= 1
+			# Direct damage, not DamageResolver - a burn tick must never itself
+			# crit and re-trigger the proc that applied the burn.
+			take_damage(_burn_damage_per_tick)
 
 	if _telegraphing:
 		_telegraph_timer -= delta
@@ -61,6 +74,12 @@ func effective_move_speed() -> float:
 func apply_slow(multiplier: float, duration: float) -> void:
 	_slow_multiplier = minf(_slow_multiplier, multiplier)
 	_slow_timer = maxf(_slow_timer, duration)
+
+func apply_burn(damage_per_tick: float, tick_interval: float, ticks: int) -> void:
+	_burn_damage_per_tick = damage_per_tick
+	_burn_tick_interval = tick_interval
+	_burn_tick_timer = tick_interval
+	_burn_ticks_remaining = ticks
 
 func start_telegraph(duration: float = -1.0) -> void:
 	_telegraphing = true
