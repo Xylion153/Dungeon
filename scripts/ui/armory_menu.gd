@@ -1,17 +1,17 @@
 extends Control
-## Weapon selection AND gear equip/unequip in one screen - one "Armory"
-## building in Town handles both now, rather than two separate stations.
-## Weapon restriction per class isn't curated yet (every class currently
-## ships with all 4 weapons in ClassData) - this just reads whatever the
-## class data says, so tightening that later is a data edit, not a code
-## change.
+## Weapon selection AND gear equip/unequip in one screen, split into
+## "Weapons" and "Armor" tabs - one "Armory" building in Town handles both
+## now, rather than two separate stations. Weapon restriction per class
+## isn't curated yet (every class currently ships with all 4 weapons in
+## ClassData) - this just reads whatever the class data says, so
+## tightening that later is a data edit, not a code change.
 
 const SLOT_NAMES := ["Helmet", "Chest", "Gloves", "Boots"]
 
 @onready var credits_label: Label = $VBoxContainer/CreditsLabel
-@onready var weapon_card_list: VBoxContainer = $VBoxContainer/ScrollContainer/ContentList/WeaponCardList
-@onready var equipped_row: HBoxContainer = $VBoxContainer/ScrollContainer/ContentList/EquippedRow
-@onready var gear_inventory_list: VBoxContainer = $VBoxContainer/ScrollContainer/ContentList/GearInventoryList
+@onready var weapon_card_list: VBoxContainer = $VBoxContainer/TabContainer/Weapons/ScrollContainer/WeaponCardList
+@onready var equipped_row: HBoxContainer = $VBoxContainer/TabContainer/Armor/ScrollContainer/ArmorContent/EquippedRow
+@onready var gear_inventory_list: VBoxContainer = $VBoxContainer/TabContainer/Armor/ScrollContainer/ArmorContent/GearInventoryList
 @onready var back_button: Button = $VBoxContainer/BackButton
 
 func _ready() -> void:

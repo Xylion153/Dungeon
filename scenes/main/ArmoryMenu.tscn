@@ -39,35 +39,42 @@ theme_override_font_sizes/font_size = 28
 horizontal_alignment = 1
 text = "Credits: 0"
 
-[node name="ScrollContainer" type="ScrollContainer" parent="VBoxContainer"]
+[node name="TabContainer" type="TabContainer" parent="VBoxContainer"]
 layout_mode = 2
 size_flags_vertical = 3
+theme_override_font_sizes/font_size = 28
 
-[node name="ContentList" type="VBoxContainer" parent="VBoxContainer/ScrollContainer"]
+[node name="Weapons" type="MarginContainer" parent="VBoxContainer/TabContainer"]
+layout_mode = 2
+theme_override_constants/margin_top = 20
+
+[node name="ScrollContainer" type="ScrollContainer" parent="VBoxContainer/TabContainer/Weapons"]
+layout_mode = 2
+
+[node name="WeaponCardList" type="VBoxContainer" parent="VBoxContainer/TabContainer/Weapons/ScrollContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 20
+
+[node name="Armor" type="MarginContainer" parent="VBoxContainer/TabContainer"]
+visible = false
+layout_mode = 2
+theme_override_constants/margin_top = 20
+
+[node name="ScrollContainer" type="ScrollContainer" parent="VBoxContainer/TabContainer/Armor"]
+layout_mode = 2
+
+[node name="ArmorContent" type="VBoxContainer" parent="VBoxContainer/TabContainer/Armor/ScrollContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_constants/separation = 16
 
-[node name="WeaponSectionLabel" type="Label" parent="VBoxContainer/ScrollContainer/ContentList"]
-layout_mode = 2
-theme_override_font_sizes/font_size = 34
-text = "Weapons"
-
-[node name="WeaponCardList" type="VBoxContainer" parent="VBoxContainer/ScrollContainer/ContentList"]
-layout_mode = 2
-theme_override_constants/separation = 20
-
-[node name="GearSectionLabel" type="Label" parent="VBoxContainer/ScrollContainer/ContentList"]
-layout_mode = 2
-theme_override_font_sizes/font_size = 34
-text = "Gear"
-
-[node name="EquippedRow" type="HBoxContainer" parent="VBoxContainer/ScrollContainer/ContentList"]
+[node name="EquippedRow" type="HBoxContainer" parent="VBoxContainer/TabContainer/Armor/ScrollContainer/ArmorContent"]
 layout_mode = 2
 alignment = 1
 theme_override_constants/separation = 16
 
-[node name="GearInventoryList" type="VBoxContainer" parent="VBoxContainer/ScrollContainer/ContentList"]
+[node name="GearInventoryList" type="VBoxContainer" parent="VBoxContainer/TabContainer/Armor/ScrollContainer/ArmorContent"]
 layout_mode = 2
 theme_override_constants/separation = 14
 
