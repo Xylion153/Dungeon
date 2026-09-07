@@ -36,6 +36,12 @@ func _ready() -> void:
 	stat_sheet.set_base("move_speed", move_speed)
 	stat_sheet.set_base("crit_chance", 0.05)
 	stat_sheet.set_base("crit_damage", 1.5)
+	stat_sheet.set_base("max_health", max_health)
+	stat_sheet.set_base("damage_multiplier", 1.0)
+	if GameState.current_class:
+		stat_sheet.set_modifiers(GameState.current_class.stat_modifiers)
+	max_health = stat_sheet.get_stat("max_health")
+	health = max_health
 
 	player_combat.setup(self, GameState.equipped_weapon)
 	player_combat.step_started.connect(_on_step_started)
@@ -232,7 +238,7 @@ func _do_ranged_hit(step: WeaponComboStepData) -> void:
 			"direction": direction,
 			"speed": step.projectile_speed,
 			"radius": step.projectile_radius,
-			"damage": step.damage,
+			"damage": step.damage * stat_sheet.get_stat("damage_multiplier"),
 			"knockback": step.knockback,
 			"pierce": step.pierce,
 			"splash_radius": step.splash_radius,
@@ -244,7 +250,7 @@ func _do_ranged_hit(step: WeaponComboStepData) -> void:
 
 func _apply_step_damage(target: Node, step: WeaponComboStepData) -> void:
 	var params := {
-		"damage": step.damage,
+		"damage": step.damage * stat_sheet.get_stat("damage_multiplier"),
 		"knockback": step.knockback,
 		"crit_chance": stat_sheet.get_stat("crit_chance"),
 		"crit_multiplier": stat_sheet.get_stat("crit_damage"),
@@ -298,7 +304,7 @@ func _cast_aoe(cast_position: Vector2, skill: SkillData) -> void:
 		if not (body is CombatActor):
 			continue
 		DamageResolver.resolve_hit(self, body, {
-			"damage": skill.damage,
+			"damage": skill.damage * stat_sheet.get_stat("damage_multiplier"),
 			"knockback": 140.0,
 			"crit_chance": stat_sheet.get_stat("crit_chance"),
 			"crit_multiplier": stat_sheet.get_stat("crit_damage"),

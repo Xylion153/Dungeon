@@ -7,6 +7,7 @@ extends CanvasLayer
 @onready var skill_button: Control = $SkillButton
 @onready var dash_button: Control = $DashButton
 @onready var wave_label: Label = $WaveLabel
+@onready var level_label: Label = $LevelLabel
 
 var _player: Node = null
 
@@ -15,6 +16,11 @@ func _ready() -> void:
 	EventBus.dash_started.connect(_on_dash_started)
 	EventBus.skill_cast.connect(_on_skill_cast)
 	EventBus.wave_started.connect(_on_wave_started)
+	SaveManager.leveled_up.connect(_on_leveled_up)
+
+	if GameState.current_class:
+		var progress := SaveManager.get_class_progress(GameState.current_class.id)
+		level_label.text = "Lv. %d" % progress["level"]
 
 func _bind_player() -> void:
 	_player = get_tree().get_first_node_in_group("player")
@@ -24,7 +30,12 @@ func _bind_player() -> void:
 	attack_button.pressed_action.connect(_player.player_input.request_attack)
 	skill_button.pressed_action.connect(_player.player_input.request_skill)
 	dash_button.pressed_action.connect(_player.player_input.request_dash)
-	attack_button.set_label(GameState.equipped_weapon.weapon_name)
+	if GameState.equipped_weapon:
+		attack_button.set_label(GameState.equipped_weapon.weapon_name)
+
+func _on_leveled_up(class_id: String, new_level: int) -> void:
+	if GameState.current_class and class_id == GameState.current_class.id:
+		level_label.text = "Lv. %d" % new_level
 
 func _on_dash_started(actor: Node) -> void:
 	if actor == _player:

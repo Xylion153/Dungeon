@@ -32,6 +32,12 @@ theme_override_font_sizes/font_size = 100
 horizontal_alignment = 1
 text = "DUNGEON"
 
+[node name="ClassLabel" type="Label" parent="CenterContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 32
+horizontal_alignment = 1
+text = "Warrior - Lv. 1"
+
 [node name="Spacer" type="Control" parent="CenterContainer/VBoxContainer"]
 custom_minimum_size = Vector2(0, 60)
 layout_mode = 2
@@ -53,3 +59,9 @@ custom_minimum_size = Vector2(560, 140)
 layout_mode = 2
 theme_override_font_sizes/font_size = 40
 text = "Skills"
+
+[node name="ChangeClassButton" type="Button" parent="CenterContainer/VBoxContainer"]
+custom_minimum_size = Vector2(560, 100)
+layout_mode = 2
+theme_override_font_sizes/font_size = 30
+text = "Change Class"

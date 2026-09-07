@@ -1,6 +1,7 @@
 extends Control
-## Lists every SkillData found in res://data/skills as a pickable card.
-## Casting a skill has no gameplay effect yet — this only wires up selection.
+## Lists the current class's starter skills as a pickable card. The broader
+## gacha-unlockable skill pool doesn't exist yet (Phase 6) - this is just
+## the guaranteed starter set for now.
 
 @onready var card_list: VBoxContainer = $VBoxContainer/ScrollContainer/CardList
 @onready var back_button: Button = $VBoxContainer/BackButton
@@ -13,7 +14,10 @@ func _populate() -> void:
 	for child in card_list.get_children():
 		child.queue_free()
 
-	for skill in DataFolder.list_resources("res://data/skills"):
+	if GameState.current_class == null:
+		return
+
+	for skill in GameState.current_class.starter_skills:
 		var is_equipped: bool = skill == GameState.equipped_skill
 		var button := Button.new()
 		button.custom_minimum_size = Vector2(0, 130)

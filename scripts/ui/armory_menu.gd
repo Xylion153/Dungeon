@@ -1,6 +1,8 @@
 extends Control
-## Lists every WeaponData found in res://data/weapons as a pickable card.
-## Ready for Spear/Gun/Wand later without any changes here — see DataFolder.
+## Lists the current class's allowed weapons as a pickable card. Weapon
+## restriction per class isn't curated yet (every class currently ships
+## with all 4 weapons in ClassData) - this just reads whatever the class
+## data says, so tightening that later is a data edit, not a code change.
 
 @onready var card_list: VBoxContainer = $VBoxContainer/ScrollContainer/CardList
 @onready var back_button: Button = $VBoxContainer/BackButton
@@ -13,7 +15,10 @@ func _populate() -> void:
 	for child in card_list.get_children():
 		child.queue_free()
 
-	for weapon in DataFolder.list_resources("res://data/weapons"):
+	if GameState.current_class == null:
+		return
+
+	for weapon in GameState.current_class.allowed_weapons:
 		var is_equipped: bool = weapon == GameState.equipped_weapon
 		var button := Button.new()
 		button.custom_minimum_size = Vector2(0, 130)
