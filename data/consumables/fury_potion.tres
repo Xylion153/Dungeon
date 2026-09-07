@@ -1,0 +1,18 @@
+[gd_resource type="Resource" script_class="ConsumableData" load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://scripts/data/consumable_data.gd" id="1_consumable"]
+[ext_resource type="Script" path="res://scripts/data/stat_modifier_data.gd" id="2_mod"]
+
+[sub_resource type="Resource" id="Resource_effect"]
+script = ExtResource("2_mod")
+stat_name = "damage_multiplier"
+flat_bonus = 0.0
+percent_bonus = 0.15
+
+[resource]
+script = ExtResource("1_consumable")
+id = "fury_potion"
+display_name = "Fury Potion"
+description = "+15% damage for this run."
+price = 50
+effect = SubResource("Resource_effect")

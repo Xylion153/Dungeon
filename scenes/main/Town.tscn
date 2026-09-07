@@ -37,4 +37,9 @@ position = Vector2(1570, 675)
 target_scene_path = "res://scenes/main/WorldMapMenu.tscn"
 station_label = "World Map"
 
+[node name="ShopStation" parent="." instance=ExtResource("3")]
+position = Vector2(960, 800)
+target_scene_path = "res://scenes/main/ShopMenu.tscn"
+station_label = "Shop"
+
 [node name="TownHud" parent="." instance=ExtResource("5")]

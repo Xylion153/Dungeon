@@ -29,10 +29,15 @@ const FLAT_STAT_BASE := {
 
 const SUBSTAT_POOL := ["damage_multiplier", "max_health", "move_speed", "crit_chance", "crit_damage", "attack_speed_multiplier"]
 
-static func roll_piece() -> GearPieceData:
+## max_rarity: -1 (default) rolls the full weighted table; a Rarity value
+## clamps the roll down to it afterward (e.g. the Shop's rarity-capped
+## purchases) - a simple clamp, not a re-normalized weight table.
+static func roll_piece(max_rarity: int = -1) -> GearPieceData:
 	var piece := GearPieceData.new()
 	piece.slot = _roll_slot()
 	piece.rarity = _roll_rarity()
+	if max_rarity >= 0:
+		piece.rarity = mini(piece.rarity, max_rarity) as GearPieceData.Rarity
 
 	var sets: Array = DataFolder.list_resources("res://data/gear_sets")
 	var chosen_set: GearSetData = sets[randi() % sets.size()] if not sets.is_empty() else null

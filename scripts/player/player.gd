@@ -67,6 +67,7 @@ func _refresh_stats() -> void:
 		modifiers.append_array(GameState.current_class.stat_modifiers)
 	modifiers.append_array(GearManager.get_all_modifiers())
 	modifiers.append_array(ArtifactManager.get_all_modifiers())
+	modifiers.append_array(GameState.active_run_buffs)
 	stat_sheet.set_modifiers(modifiers)
 
 	# A mid-run gear change must not full-heal or overkill on a max-health

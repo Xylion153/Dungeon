@@ -19,5 +19,8 @@ func _populate() -> void:
 	button.custom_minimum_size = Vector2(0, 130)
 	button.add_theme_font_size_override("font_size", 30)
 	button.text = "Dungeon Raid\nFight through escalating waves to a boss."
-	button.pressed.connect(func(): get_tree().change_scene_to_file("res://scenes/main/Arena.tscn"))
+	button.pressed.connect(func():
+		GameState.apply_run_buffs()
+		get_tree().change_scene_to_file("res://scenes/main/Arena.tscn")
+	)
 	card_list.add_child(button)

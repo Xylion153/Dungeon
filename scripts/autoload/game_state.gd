@@ -7,6 +7,19 @@ var equipped_weapon: WeaponData = null
 var equipped_skill: SkillData = null
 var run_loot: Array[GearPieceData] = [] ## gear collected THIS run - banked to SaveManager's inventory on death, not equipped mid-run
 var run_artifact_loot: Array[ArtifactPieceData] = [] ## same idea as run_loot, for Artifacts
+var active_run_buffs: Array[StatModifierData] = [] ## Shop consumable effects for the current run - rebuilt by arena.gd on each run start
+
+## Consumes one of each owned Shop consumable and stages its effect for the
+## run about to start. Must run BEFORE Arena.tscn loads (its Player reads
+## active_run_buffs during its own _ready(), and children ready before their
+## parent - Arena.tscn's own _ready() would already be too late) - call this
+## from every place that changes the scene to Arena.tscn, not just one.
+func apply_run_buffs() -> void:
+	active_run_buffs.clear()
+	for consumable in DataFolder.list_resources("res://data/consumables"):
+		if SaveManager.get_consumable_count(consumable.id) > 0:
+			SaveManager.remove_consumable(consumable.id, 1)
+			active_run_buffs.append(consumable.effect)
 
 func select_class(class_data: ClassData) -> void:
 	current_class = class_data

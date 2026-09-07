@@ -8,7 +8,7 @@ const SAVE_PATH := "user://save.json"
 
 signal leveled_up(class_id: String, new_level: int)
 
-var _data: Dictionary = {"current_class_id": "", "classes": {}, "credits": 0, "inventory": [], "artifact_inventory": []}
+var _data: Dictionary = {"current_class_id": "", "classes": {}, "credits": 0, "gems": 0, "inventory": [], "artifact_inventory": [], "consumable_inventory": {}}
 
 func _ready() -> void:
 	_load()
@@ -50,6 +50,13 @@ func add_credits(amount: int) -> void:
 func get_credits() -> int:
 	return int(_data.get("credits", 0))
 
+func add_gems(amount: int) -> void:
+	_data["gems"] = int(_data.get("gems", 0)) + amount
+	_save()
+
+func get_gems() -> int:
+	return int(_data.get("gems", 0))
+
 func add_to_inventory(piece: GearPieceData) -> void:
 	var inventory: Array = _data["inventory"]
 	inventory.append(piece.to_dict())
@@ -84,6 +91,24 @@ func remove_artifact_from_inventory(index: int) -> void:
 		inventory.remove_at(index)
 		_save()
 
+func add_consumable(id: String) -> void:
+	var consumables: Dictionary = _data["consumable_inventory"]
+	consumables[id] = int(consumables.get(id, 0)) + 1
+	_save()
+
+func get_consumable_count(id: String) -> int:
+	var consumables: Dictionary = _data.get("consumable_inventory", {})
+	return int(consumables.get(id, 0))
+
+func remove_consumable(id: String, amount: int) -> void:
+	var consumables: Dictionary = _data["consumable_inventory"]
+	var remaining: int = int(consumables.get(id, 0)) - amount
+	if remaining > 0:
+		consumables[id] = remaining
+	else:
+		consumables.erase(id)
+	_save()
+
 func _load() -> void:
 	if not FileAccess.file_exists(SAVE_PATH):
 		return
@@ -101,6 +126,10 @@ func _load() -> void:
 			_data["inventory"] = []
 		if not _data.has("artifact_inventory"):
 			_data["artifact_inventory"] = []
+		if not _data.has("gems"):
+			_data["gems"] = 0
+		if not _data.has("consumable_inventory"):
+			_data["consumable_inventory"] = {}
 
 func _save() -> void:
 	var file := FileAccess.open(SAVE_PATH, FileAccess.WRITE)
