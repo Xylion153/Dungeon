@@ -24,3 +24,13 @@ func _populate() -> void:
 		get_tree().change_scene_to_file("res://scenes/main/Arena.tscn")
 	)
 	card_list.add_child(button)
+
+	var raid_button := Button.new()
+	raid_button.custom_minimum_size = Vector2(0, 130)
+	raid_button.add_theme_font_size_override("font_size", 30)
+	raid_button.text = "The Brute (Raid)\nDefeat a powerful boss for guaranteed Gems."
+	raid_button.pressed.connect(func():
+		GameState.apply_run_buffs()
+		get_tree().change_scene_to_file("res://scenes/main/RaidArena.tscn")
+	)
+	card_list.add_child(raid_button)
