@@ -44,51 +44,51 @@ region = Rect2(1186, 198, 180, 190)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_8gh5f"]
 atlas = ExtResource("1_pxnrw")
-region = Rect2(168, 586, 180, 190)
+region = Rect2(154, 784, 180, 190)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_w8cfw"]
 atlas = ExtResource("1_pxnrw")
-region = Rect2(371.5, 586, 180, 190)
+region = Rect2(362.5, 785, 180, 190)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_meeas"]
 atlas = ExtResource("1_pxnrw")
-region = Rect2(571.5, 587, 180, 190)
+region = Rect2(566.5, 785, 180, 190)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_rs74n"]
 atlas = ExtResource("1_pxnrw")
-region = Rect2(772, 587, 180, 190)
+region = Rect2(776.5, 785, 180, 190)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_i3yh6"]
 atlas = ExtResource("1_pxnrw")
-region = Rect2(974.5, 587, 180, 190)
+region = Rect2(973.5, 785, 180, 190)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_58nq5"]
 atlas = ExtResource("1_pxnrw")
-region = Rect2(1179, 587, 180, 190)
+region = Rect2(1176.5, 785, 180, 190)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_i8f8o"]
 atlas = ExtResource("1_pxnrw")
-region = Rect2(154, 784, 180, 190)
+region = Rect2(168, 586, 180, 190)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_fvxgo"]
 atlas = ExtResource("1_pxnrw")
-region = Rect2(362.5, 785, 180, 190)
+region = Rect2(371.5, 586, 180, 190)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_moxt5"]
 atlas = ExtResource("1_pxnrw")
-region = Rect2(566.5, 785, 180, 190)
+region = Rect2(571.5, 587, 180, 190)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_ss3nq"]
 atlas = ExtResource("1_pxnrw")
-region = Rect2(776.5, 785, 180, 190)
+region = Rect2(772, 587, 180, 190)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_fvrw2"]
 atlas = ExtResource("1_pxnrw")
-region = Rect2(973.5, 785, 180, 190)
+region = Rect2(974.5, 587, 180, 190)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_laxyq"]
 atlas = ExtResource("1_pxnrw")
-region = Rect2(1176.5, 785, 180, 190)
+region = Rect2(1179, 587, 180, 190)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_u1xfh"]
 atlas = ExtResource("1_pxnrw")

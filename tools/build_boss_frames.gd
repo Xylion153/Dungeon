@@ -6,7 +6,7 @@ func _initialize() -> void:
 	SpriteSheetBuilder.build_with_counts(
 		"res://assets/sprites/boss_sheet.png",
 		"res://assets/sprites/boss_frames.tres",
-		["idle", "walk_down", "walk_up", "walk_left", "walk_right"],
+		["idle", "walk_down", "walk_up", "walk_right", "walk_left"], # sheet's row 4 is Right, row 5 is Left
 		[5, 6, 5, 6, 6], # this sheet's idle and walk_up rows were drawn with 5 poses, not 6
 		{"idle": 6.0, "walk_down": 10.0, "walk_up": 10.0, "walk_left": 10.0, "walk_right": 10.0},
 		# Cell must stay under the pose spacing (~256px across, ~205px per row

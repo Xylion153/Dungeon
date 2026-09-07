@@ -48,51 +48,51 @@ region = Rect2(1225.5, 217, 248, 198)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_sv46n"]
 atlas = ExtResource("1_g0jbq")
-region = Rect2(56.5, 601, 248, 198)
+region = Rect2(19.5, 807, 248, 198)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_dlkqc"]
 atlas = ExtResource("1_g0jbq")
-region = Rect2(299.5, 602, 248, 198)
+region = Rect2(257, 806, 248, 198)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_vaoqm"]
 atlas = ExtResource("1_g0jbq")
-region = Rect2(535, 601, 248, 198)
+region = Rect2(496, 805, 248, 198)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_jk4mf"]
 atlas = ExtResource("1_g0jbq")
-region = Rect2(770, 599, 248, 198)
+region = Rect2(734, 805, 248, 198)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_hk1wx"]
 atlas = ExtResource("1_g0jbq")
-region = Rect2(1013, 600, 248, 198)
+region = Rect2(973.5, 807, 248, 198)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_afhks"]
 atlas = ExtResource("1_g0jbq")
-region = Rect2(1254, 599, 248, 198)
+region = Rect2(1223, 810, 248, 198)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_mfg5l"]
 atlas = ExtResource("1_g0jbq")
-region = Rect2(19.5, 807, 248, 198)
+region = Rect2(56.5, 601, 248, 198)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_5mtsh"]
 atlas = ExtResource("1_g0jbq")
-region = Rect2(257, 806, 248, 198)
+region = Rect2(299.5, 602, 248, 198)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_h6nn3"]
 atlas = ExtResource("1_g0jbq")
-region = Rect2(496, 805, 248, 198)
+region = Rect2(535, 601, 248, 198)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_03w51"]
 atlas = ExtResource("1_g0jbq")
-region = Rect2(734, 805, 248, 198)
+region = Rect2(770, 599, 248, 198)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_wl16h"]
 atlas = ExtResource("1_g0jbq")
-region = Rect2(973.5, 807, 248, 198)
+region = Rect2(1013, 600, 248, 198)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_ufp24"]
 atlas = ExtResource("1_g0jbq")
-region = Rect2(1223, 810, 248, 198)
+region = Rect2(1254, 599, 248, 198)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_8peyr"]
 atlas = ExtResource("1_g0jbq")
