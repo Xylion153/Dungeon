@@ -5,6 +5,7 @@
 [ext_resource type="Script" path="res://scripts/player/player_combat.gd" id="3"]
 [ext_resource type="Script" path="res://scripts/visuals/weapon_visual.gd" id="5"]
 [ext_resource type="SpriteFrames" path="res://assets/sprites/player_frames.tres" id="6"]
+[ext_resource type="PackedScene" path="res://scenes/ui/HealthBar.tscn" id="7"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_player"]
 radius = 18.0
@@ -33,3 +34,5 @@ script = ExtResource("2")
 
 [node name="PlayerCombat" type="Node" parent="."]
 script = ExtResource("3")
+
+[node name="HealthBar" parent="." instance=ExtResource("7")]
