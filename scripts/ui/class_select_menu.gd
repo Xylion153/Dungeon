@@ -29,4 +29,4 @@ func _populate() -> void:
 
 func _on_class_selected(class_data: ClassData) -> void:
 	GameState.select_class(class_data)
-	get_tree().change_scene_to_file("res://scenes/main/MainMenu.tscn")
+	get_tree().change_scene_to_file("res://scenes/main/Town.tscn")

@@ -7,7 +7,7 @@ extends Control
 @onready var back_button: Button = $VBoxContainer/BackButton
 
 func _ready() -> void:
-	back_button.pressed.connect(func(): get_tree().change_scene_to_file("res://scenes/main/MainMenu.tscn"))
+	back_button.pressed.connect(func(): get_tree().change_scene_to_file("res://scenes/main/Town.tscn"))
 	_populate()
 
 func _populate() -> void:

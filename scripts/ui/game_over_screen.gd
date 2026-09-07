@@ -11,7 +11,7 @@ extends CanvasLayer
 func _ready() -> void:
 	visible = false
 	retry_button.pressed.connect(func(): get_tree().change_scene_to_file("res://scenes/main/Arena.tscn"))
-	change_loadout_button.pressed.connect(func(): get_tree().change_scene_to_file("res://scenes/main/MainMenu.tscn"))
+	change_loadout_button.pressed.connect(func(): get_tree().change_scene_to_file("res://scenes/main/Town.tscn"))
 
 func show_result(wave_reached: int) -> void:
 	wave_label.text = "Wave Reached: %d" % wave_reached
