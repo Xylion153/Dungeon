@@ -1,7 +1,7 @@
 class_name EnemyBase
 extends CombatActor
 ## Shared enemy behavior: player-tracking, telegraph flash/timer, knockback,
-## facing-toward-player rotation, and slow-status handling. Archetypes
+## facing-toward-player animation, and slow-status handling. Archetypes
 ## (MeleeChaser, RangedEnemy, OrbitingEnemy, BossEnemy) implement movement
 ## and attacks via the two virtual hooks below rather than duplicating any
 ## of this.
@@ -9,7 +9,9 @@ extends CombatActor
 @export var move_speed := 90.0
 @export var telegraph_duration := 0.35
 
-@onready var sprite: ActorShape = $Shape
+const STOPPED_SPEED := 5.0 # below this the walk cycle reads as sliding, so idle instead
+
+@onready var sprite: AnimatedSprite2D = $Shape
 
 var _player: Node2D
 var _telegraphing := false
@@ -64,9 +66,29 @@ func _physics_process(delta: float) -> void:
 
 	velocity += consume_knockback(delta)
 	move_and_slide()
+	_update_sprite_animation()
 
-	if sprite:
-		sprite.rotation = (_player.global_position - global_position).angle() + PI / 2.0
+func _update_sprite_animation() -> void:
+	if sprite == null or _player == null or not is_instance_valid(_player):
+		return
+
+	# Direction comes from where the player IS, not from where this enemy is
+	# heading - an orbiting enemy strafes sideways but should still face you,
+	# which is what the old free-rotating placeholder shape conveyed.
+	if velocity.length() < STOPPED_SPEED:
+		if sprite.animation != "idle":
+			sprite.play("idle")
+		return
+
+	var to_player: Vector2 = _player.global_position - global_position
+	var anim_name: String
+	if absf(to_player.x) > absf(to_player.y):
+		anim_name = "walk_right" if to_player.x > 0.0 else "walk_left"
+	else:
+		anim_name = "walk_down" if to_player.y > 0.0 else "walk_up"
+
+	if sprite.animation != anim_name:
+		sprite.play(anim_name)
 
 func effective_move_speed() -> float:
 	return move_speed * _slow_multiplier
