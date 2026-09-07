@@ -1,10 +1,11 @@
 extends Control
 ## Weapon selection AND gear/artifact equip/unequip in one screen, split
 ## into "Weapons", "Armor", and "Artifacts" tabs - one "Armory" building in
-## Town handles all three now, rather than separate stations. Weapon
-## restriction per class isn't curated yet (every class currently ships
-## with all 4 weapons in ClassData) - this just reads whatever the class
-## data says, so tightening that later is a data edit, not a code change.
+## Town handles all three now, rather than separate stations. The Weapons
+## tab shows the GLOBAL weapon pool (every class is eligible for every
+## weapon once unlocked - see ClassData.allowed_weapons), gated by
+## SaveManager.owns_weapon() rather than filtered by class at all; only
+## Gacha (or a class's own free starter) grants ownership.
 
 const SLOT_NAMES := ["Helmet", "Chest", "Gloves", "Boots"]
 const ARTIFACT_SLOT_NAMES := ["Amulet", "Ring"]
@@ -31,17 +32,21 @@ func _populate_weapons() -> void:
 	for child in weapon_card_list.get_children():
 		child.queue_free()
 
-	if GameState.current_class == null:
-		return
-
-	for weapon in GameState.current_class.allowed_weapons:
+	for weapon: WeaponData in DataFolder.list_resources("res://data/weapons"):
+		var owned: bool = SaveManager.owns_weapon(weapon.id)
 		var is_equipped: bool = weapon == GameState.equipped_weapon
 		var button := Button.new()
 		button.custom_minimum_size = Vector2(0, 130)
 		button.add_theme_font_size_override("font_size", 30)
-		button.text = "%s%s\n%s" % [weapon.weapon_name, " (equipped)" if is_equipped else "", weapon.description]
-		button.disabled = is_equipped
-		button.pressed.connect(_on_weapon_selected.bind(weapon))
+		if owned:
+			var rank_text: String = " ★%d" % SaveManager.get_weapon_rank(weapon.id)
+			button.text = "%s%s%s\n%s" % [weapon.weapon_name, rank_text, " (equipped)" if is_equipped else "", weapon.description]
+			button.disabled = is_equipped
+			button.pressed.connect(_on_weapon_selected.bind(weapon))
+		else:
+			var rarity_text: String = "Rare" if weapon.rarity == WeaponData.Rarity.RARE else "Common"
+			button.text = "%s (Locked - %s)\nUnlock via Gacha" % [weapon.weapon_name, rarity_text]
+			button.disabled = true
 		weapon_card_list.add_child(button)
 
 func _on_weapon_selected(weapon: WeaponData) -> void:

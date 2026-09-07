@@ -68,6 +68,13 @@ func _refresh_stats() -> void:
 	modifiers.append_array(GearManager.get_all_modifiers())
 	modifiers.append_array(ArtifactManager.get_all_modifiers())
 	modifiers.append_array(GameState.active_run_buffs)
+	if GameState.equipped_weapon:
+		var rank: int = SaveManager.get_weapon_rank(GameState.equipped_weapon.id)
+		if rank > 1:
+			var rank_bonus := StatModifierData.new()
+			rank_bonus.stat_name = "damage_multiplier"
+			rank_bonus.percent_bonus = 0.05 * float(rank - 1)
+			modifiers.append(rank_bonus)
 	stat_sheet.set_modifiers(modifiers)
 
 	# A mid-run gear change must not full-heal or overkill on a max-health
@@ -308,7 +315,8 @@ func _try_cast_skill() -> void:
 	if skill == null or _skill_cooldown_timer > 0.0 or mana < skill.mana_cost:
 		return
 
-	_skill_cooldown_timer = skill.cooldown
+	var skill_rank: int = SaveManager.get_skill_rank(skill.id)
+	_skill_cooldown_timer = skill.cooldown * (1.0 - 0.05 * float(maxi(skill_rank - 1, 0)))
 	mana -= skill.mana_cost
 
 	if skill.dash_distance > 0.0:

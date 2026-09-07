@@ -4,9 +4,12 @@ extends Resource
 ## after the final step finishes (never after every individual hit).
 
 enum Kind { MELEE, RANGED }
+enum Rarity { COMMON, RARE }
 
+@export var id := "" ## stable save key, e.g. "sword" - never shown to the player
 @export var weapon_name := ""
 @export var description := ""
+@export var rarity: Rarity = Rarity.COMMON
 @export var kind: Kind = Kind.MELEE
 @export var steps: Array[WeaponComboStepData] = []
 @export var combo_chain_window := 0.4

@@ -4,7 +4,9 @@
 
 [resource]
 script = ExtResource("1_skill")
+id = "blink_strike"
 skill_name = "Blink Strike"
+rarity = 1
 description = "Short forward teleport with i-frames, deals AoE damage on landing. Mobility + repositioning + damage in one action."
 damage = 20.0
 radius = 60.0

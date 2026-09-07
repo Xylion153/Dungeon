@@ -4,7 +4,9 @@
 
 [resource]
 script = ExtResource("1_skill")
+id = "whirlwind"
 skill_name = "Whirlwind"
+rarity = 0
 description = "Instant AoE damage around the player, brief self-invulnerability. Panic button / burst damage."
 damage = 25.0
 radius = 100.0

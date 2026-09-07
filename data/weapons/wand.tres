@@ -23,7 +23,9 @@ spread_degrees = 0.0
 
 [resource]
 script = ExtResource("1_wpn")
+id = "wand"
 weapon_name = "Wand"
+rarity = 1
 description = "Highest per-hit damage, slow channel. Explodes on impact for splash to nearby enemies."
 kind = 1
 steps = Array[ExtResource("2_step")]([SubResource("Resource_step1")])

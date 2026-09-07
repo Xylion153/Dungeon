@@ -30,5 +30,6 @@ description = "A balanced hybrid who leans on debuffs and area control."
 passive_description = "+10% max health, +10% damage"
 stat_modifiers = Array[ExtResource("2_mod")]([SubResource("Resource_mod1"), SubResource("Resource_mod2")])
 allowed_weapons = Array[ExtResource("3_wpntype")]([ExtResource("5_sword"), ExtResource("6_spear"), ExtResource("7_gun"), ExtResource("8_wand")])
+starter_weapon = ExtResource("7_gun")
 starter_skills = Array[ExtResource("4_skltype")]([ExtResource("9_frostnova")])
 base_class_id = ""

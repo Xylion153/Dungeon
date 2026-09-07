@@ -59,7 +59,9 @@ spread_degrees = 0.0
 
 [resource]
 script = ExtResource("1_wpn")
+id = "sword"
 weapon_name = "Sword"
+rarity = 0
 description = "Balanced damage, medium reach. Light, light, heavy finisher."
 kind = 0
 steps = Array[ExtResource("2_step")]([SubResource("Resource_step1"), SubResource("Resource_step2"), SubResource("Resource_step3")])

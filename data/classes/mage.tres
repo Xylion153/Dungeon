@@ -24,5 +24,6 @@ description = "A burst-focused caster who deals heavy damage from range."
 passive_description = "+20% damage"
 stat_modifiers = Array[ExtResource("2_mod")]([SubResource("Resource_mod1")])
 allowed_weapons = Array[ExtResource("3_wpntype")]([ExtResource("5_sword"), ExtResource("6_spear"), ExtResource("7_gun"), ExtResource("8_wand")])
+starter_weapon = ExtResource("8_wand")
 starter_skills = Array[ExtResource("4_skltype")]([ExtResource("9_frostnova")])
 base_class_id = ""

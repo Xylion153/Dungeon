@@ -4,7 +4,9 @@
 
 [resource]
 script = ExtResource("1_skill")
+id = "frost_nova"
 skill_name = "Frost Nova"
+rarity = 0
 description = "Weaker AoE damage, but slows everything it hits for a few seconds. Crowd control."
 damage = 15.0
 radius = 120.0

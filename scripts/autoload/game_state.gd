@@ -26,5 +26,12 @@ func select_class(class_data: ClassData) -> void:
 	SaveManager.get_class_progress(class_data.id) # ensures a save entry exists
 	SaveManager.set_current_class_id(class_data.id)
 
-	equipped_weapon = class_data.allowed_weapons[0] if not class_data.allowed_weapons.is_empty() else null
+	# Idempotent free grant - picking a class is always immediately playable
+	# even before any Gacha pulls, without double-counting as a paid "dupe".
+	if class_data.starter_weapon:
+		SaveManager.grant_weapon(class_data.starter_weapon.id)
+	if not class_data.starter_skills.is_empty():
+		SaveManager.grant_skill(class_data.starter_skills[0].id)
+
+	equipped_weapon = class_data.starter_weapon
 	equipped_skill = class_data.starter_skills[0] if not class_data.starter_skills.is_empty() else null

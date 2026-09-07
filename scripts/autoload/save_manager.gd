@@ -8,7 +8,9 @@ const SAVE_PATH := "user://save.json"
 
 signal leveled_up(class_id: String, new_level: int)
 
-var _data: Dictionary = {"current_class_id": "", "classes": {}, "credits": 0, "gems": 0, "inventory": [], "artifact_inventory": [], "consumable_inventory": {}}
+const MAX_RANK := 5
+
+var _data: Dictionary = {"current_class_id": "", "classes": {}, "credits": 0, "gems": 0, "inventory": [], "artifact_inventory": [], "consumable_inventory": {}, "owned_weapons": {}, "owned_skills": {}, "gacha_pity_counter": 0}
 
 func _ready() -> void:
 	_load()
@@ -109,6 +111,59 @@ func remove_consumable(id: String, amount: int) -> void:
 		consumables.erase(id)
 	_save()
 
+## Free grant (class starters) - idempotent, never ranks up an already-owned
+## item. Paid pulls use pull_weapon()/pull_skill() instead, which do rank up.
+func grant_weapon(id: String) -> void:
+	var owned: Dictionary = _data["owned_weapons"]
+	if not owned.has(id):
+		owned[id] = 1
+		_save()
+
+func grant_skill(id: String) -> void:
+	var owned: Dictionary = _data["owned_skills"]
+	if not owned.has(id):
+		owned[id] = 1
+		_save()
+
+## Paid-pull grant: rank 1 if unowned, otherwise fuses the duplicate into a
+## rank-up (capped at MAX_RANK). Returns the new rank.
+func pull_weapon(id: String) -> int:
+	var owned: Dictionary = _data["owned_weapons"]
+	var new_rank: int = mini(int(owned.get(id, 0)) + 1, MAX_RANK)
+	owned[id] = new_rank
+	_save()
+	return new_rank
+
+func pull_skill(id: String) -> int:
+	var owned: Dictionary = _data["owned_skills"]
+	var new_rank: int = mini(int(owned.get(id, 0)) + 1, MAX_RANK)
+	owned[id] = new_rank
+	_save()
+	return new_rank
+
+func owns_weapon(id: String) -> bool:
+	return _data["owned_weapons"].has(id)
+
+func get_weapon_rank(id: String) -> int:
+	return int(_data["owned_weapons"].get(id, 0))
+
+func owns_skill(id: String) -> bool:
+	return _data["owned_skills"].has(id)
+
+func get_skill_rank(id: String) -> int:
+	return int(_data["owned_skills"].get(id, 0))
+
+func add_gacha_pity() -> void:
+	_data["gacha_pity_counter"] = int(_data.get("gacha_pity_counter", 0)) + 1
+	_save()
+
+func reset_gacha_pity() -> void:
+	_data["gacha_pity_counter"] = 0
+	_save()
+
+func get_gacha_pity() -> int:
+	return int(_data.get("gacha_pity_counter", 0))
+
 func _load() -> void:
 	if not FileAccess.file_exists(SAVE_PATH):
 		return
@@ -130,6 +185,12 @@ func _load() -> void:
 			_data["gems"] = 0
 		if not _data.has("consumable_inventory"):
 			_data["consumable_inventory"] = {}
+		if not _data.has("owned_weapons"):
+			_data["owned_weapons"] = {}
+		if not _data.has("owned_skills"):
+			_data["owned_skills"] = {}
+		if not _data.has("gacha_pity_counter"):
+			_data["gacha_pity_counter"] = 0
 
 func _save() -> void:
 	var file := FileAccess.open(SAVE_PATH, FileAccess.WRITE)
