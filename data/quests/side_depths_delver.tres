@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="QuestData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/data/quest_data.gd" id="1_quest"]
+
+[resource]
+script = ExtResource("1_quest")
+id = "side_depths_delver"
+display_name = "Depths Delver"
+description = "Clear The Depths 3 times."
+category = 1
+objective_type = 1
+objective_target = "depths"
+target_count = 3
+reward_credits = 150
+reward_gems = 30
+requires_quest_id = ""

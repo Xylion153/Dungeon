@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="QuestData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/data/quest_data.gd" id="1_quest"]
+
+[resource]
+script = ExtResource("1_quest")
+id = "side_monster_hunter"
+display_name = "Monster Hunter"
+description = "Defeat 30 enemies."
+category = 1
+objective_type = 0
+objective_target = ""
+target_count = 30
+reward_credits = 100
+reward_gems = 20
+requires_quest_id = ""

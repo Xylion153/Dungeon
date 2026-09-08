@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="QuestData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/data/quest_data.gd" id="1_quest"]
+
+[resource]
+script = ExtResource("1_quest")
+id = "main_stage_04"
+display_name = "Stage 4"
+description = "Clear a Raid 4 times."
+category = 2
+objective_type = 1
+objective_target = "raid"
+target_count = 4
+reward_credits = 180
+reward_gems = 90
+requires_quest_id = "main_stage_03"

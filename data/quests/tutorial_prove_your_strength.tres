@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="QuestData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/data/quest_data.gd" id="1_quest"]
+
+[resource]
+script = ExtResource("1_quest")
+id = "tutorial_prove_your_strength"
+display_name = "Prove Your Strength"
+description = "Clear a Raid."
+category = 0
+objective_type = 1
+objective_target = "raid"
+target_count = 1
+reward_credits = 50
+reward_gems = 0
+requires_quest_id = ""

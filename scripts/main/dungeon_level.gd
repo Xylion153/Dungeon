@@ -34,6 +34,8 @@ const ENEMY_SCENES := [
 @onready var room_content: Node2D = $RoomContent
 @onready var room_camera: Camera2D = $RoomCamera
 @onready var room_floor: Polygon2D = $RoomFloor
+@onready var minimap_panel: Control = $Hud/DungeonMinimap
+@onready var minimap: DungeonMinimap = $Hud/DungeonMinimap/Margin/Map
 
 var _rooms: Dictionary = {} # Vector2i -> RoomData
 var _current_pos: Vector2i
@@ -41,6 +43,7 @@ var _alive_enemies: Array = []
 var _door_triggers: Array[Area2D] = []
 var _room_has_enemies := false
 var _pending_spawns := 0 ## enemies whose telegraph marker hasn't resolved into a real spawn yet - the clear-check must not run while this is > 0
+var _transition_pending := false ## true from the moment a door fires until the deferred _load_room actually runs - blocks a second, stale door (one whose queue_free() hasn't landed yet) from queuing another transition first
 
 func _ready() -> void:
 	# Fixed per-room camera, not scrolling with the player (small rooms are
@@ -60,6 +63,9 @@ func _ready() -> void:
 	_rooms = generated["rooms"]
 	_current_pos = generated["start_pos"]
 
+	minimap_panel.visible = true
+	minimap.setup(_rooms)
+
 	EventBus.enemy_killed.connect(_on_enemy_killed)
 	player.died.connect(_on_player_died)
 
@@ -74,6 +80,7 @@ func _physics_process(_delta: float) -> void:
 		_rooms[_current_pos].cleared = true
 		for door in _door_triggers:
 			door.monitoring = true
+		minimap.refresh(_current_pos)
 
 func _on_enemy_killed(_attacker: Node, _enemy: Node, _killing_blow_damage: float) -> void:
 	if GameState.current_class:
@@ -90,6 +97,7 @@ func _bank_run_loot() -> void:
 func _on_boss_died() -> void:
 	_bank_run_loot()
 	SaveManager.add_gems(BOSS_REWARD_GEMS)
+	EventBus.content_cleared.emit("depths")
 	result_screen.show_victory(BOSS_REWARD_GEMS, "res://scenes/main/DungeonLevel.tscn")
 
 func _on_player_died() -> void:
@@ -100,6 +108,7 @@ func _on_player_died() -> void:
 ## they walked through the top door) - Vector2i.ZERO for the initial load,
 ## which just centers the player in the Start room.
 func _load_room(pos: Vector2i, entry_direction: Vector2i) -> void:
+	_transition_pending = false
 	for child in room_content.get_children():
 		child.queue_free()
 	_door_triggers.clear()
@@ -109,6 +118,7 @@ func _load_room(pos: Vector2i, entry_direction: Vector2i) -> void:
 
 	var room: RoomData = _rooms[pos]
 	_current_pos = pos
+	room.visited = true
 
 	room_label.text = "%s Room" % RoomData.Type.keys()[room.room_type].capitalize()
 
@@ -135,6 +145,8 @@ func _load_room(pos: Vector2i, entry_direction: Vector2i) -> void:
 
 	for door in _door_triggers:
 		door.monitoring = room.cleared
+
+	minimap.refresh(_current_pos)
 
 func _local_to_global(local_pos: Vector2) -> Vector2:
 	return room_content.global_position + local_pos
@@ -201,7 +213,7 @@ func _build_door_trigger(direction: Vector2i, cross_offset: float, horizontal: b
 	door.add_child(shape)
 	door.position = Vector2(0.0, cross_offset) if horizontal else Vector2(cross_offset, 0.0)
 	room_content.add_child(door)
-	door.body_entered.connect(_on_door_entered.bind(direction))
+	door.body_entered.connect(_on_door_entered.bind(door, direction))
 	_door_triggers.append(door)
 
 ## A lit threshold strip pushing out past the wall line, plus two small
@@ -243,13 +255,32 @@ func _build_door_frame(direction: Vector2i, cross_offset: float, horizontal: boo
 		post.position = Vector2(side * DOOR_GAP * 0.5, cross_offset) if horizontal else Vector2(cross_offset, side * DOOR_GAP * 0.5)
 		room_content.add_child(post)
 
-func _on_door_entered(body: Node, direction: Vector2i) -> void:
-	if not body.is_in_group("player"):
+## Area2D.body_entered fires mid-physics-step, while the physics server is
+## still flushing queries - building the new room's walls/doors synchronously
+## from here throws "Can't change this state while flushing queries" and
+## silently fails to apply their collision state, so the actual room swap is
+## deferred to run after the physics step finishes.
+##
+## Deferring surfaced a second, separate issue: on the frame right after a
+## fresh room's doors are built, Godot can dispatch one spurious
+## body_entered for a door the player isn't anywhere near (confirmed via
+## instrumentation - a real, current, non-stale door object firing hundreds
+## of pixels from the player's actual position, most likely PhysicsServer2D
+## RID reuse from the just-freed previous room bleeding into the new area's
+## first broadphase pass). `door in _door_triggers` rules out signals from
+## doors that belonged to an already-replaced room, but not this same-room
+## false positive - only an actual distance check catches that, so this
+## verifies the player is really near the door before trusting the signal.
+func _on_door_entered(body: Node, door: Area2D, direction: Vector2i) -> void:
+	if not body.is_in_group("player") or _transition_pending or door not in _door_triggers:
+		return
+	if body is Node2D and body.global_position.distance_to(door.global_position) > 200.0:
 		return
 	var target_pos: Vector2i = _current_pos + direction
 	if not _rooms.has(target_pos):
 		return
-	_load_room(target_pos, direction)
+	_transition_pending = true
+	call_deferred("_load_room", target_pos, direction)
 
 func _spawn_combat_enemies() -> void:
 	var count := randi_range(2, 4)

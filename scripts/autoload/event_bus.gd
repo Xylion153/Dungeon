@@ -11,3 +11,4 @@ signal damage_dealt(attacker: Node, target: Node, damage: float, is_crit: bool)
 signal skill_cast(actor: Node, cooldown: float)
 signal wave_started(wave_number: int)
 signal wave_cleared(wave_number: int)
+signal content_cleared(content_id: String) ## emitted when a full run of a content type finishes - "raid", "depths"

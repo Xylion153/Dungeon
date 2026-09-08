@@ -40,6 +40,7 @@ func _on_boss_died() -> void:
 	const REWARD_GEMS := 50
 	_bank_run_loot()
 	SaveManager.add_gems(REWARD_GEMS)
+	EventBus.content_cleared.emit("raid")
 	result_screen.show_victory(REWARD_GEMS)
 
 func _on_player_died() -> void:

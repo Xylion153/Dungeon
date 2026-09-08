@@ -10,7 +10,7 @@ signal leveled_up(class_id: String, new_level: int)
 
 const MAX_RANK := 5
 
-var _data: Dictionary = {"current_class_id": "", "classes": {}, "credits": 0, "gems": 0, "inventory": [], "artifact_inventory": [], "consumable_inventory": {}, "owned_weapons": {}, "owned_skills": {}, "gacha_pity_counter": 0}
+var _data: Dictionary = {"current_class_id": "", "classes": {}, "credits": 0, "gems": 0, "inventory": [], "artifact_inventory": [], "consumable_inventory": {}, "owned_weapons": {}, "owned_skills": {}, "gacha_pity_counter": 0, "quest_progress": {}, "quest_claimed": {}, "job_slots": []}
 
 func _ready() -> void:
 	_load()
@@ -164,6 +164,36 @@ func reset_gacha_pity() -> void:
 func get_gacha_pity() -> int:
 	return int(_data.get("gacha_pity_counter", 0))
 
+func get_quest_progress(id: String) -> int:
+	return int(_data["quest_progress"].get(id, 0))
+
+func add_quest_progress(id: String, amount: int) -> void:
+	var progress: Dictionary = _data["quest_progress"]
+	progress[id] = int(progress.get(id, 0)) + amount
+	_save()
+
+func is_quest_claimed(id: String) -> bool:
+	return _data["quest_claimed"].has(id)
+
+func mark_quest_claimed(id: String) -> void:
+	_data["quest_claimed"][id] = true
+	_save()
+
+func get_job_slots() -> Array:
+	return _data["job_slots"]
+
+func set_job_slots(slots: Array) -> void:
+	_data["job_slots"] = slots
+	_save()
+
+func add_job_progress(index: int, amount: int) -> void:
+	var slots: Array = _data["job_slots"]
+	if index < 0 or index >= slots.size():
+		return
+	var job: Dictionary = slots[index]
+	job["progress"] = int(job.get("progress", 0)) + amount
+	_save()
+
 func _load() -> void:
 	if not FileAccess.file_exists(SAVE_PATH):
 		return
@@ -191,6 +221,12 @@ func _load() -> void:
 			_data["owned_skills"] = {}
 		if not _data.has("gacha_pity_counter"):
 			_data["gacha_pity_counter"] = 0
+		if not _data.has("quest_progress"):
+			_data["quest_progress"] = {}
+		if not _data.has("quest_claimed"):
+			_data["quest_claimed"] = {}
+		if not _data.has("job_slots"):
+			_data["job_slots"] = []
 
 func _save() -> void:
 	var file := FileAccess.open(SAVE_PATH, FileAccess.WRITE)

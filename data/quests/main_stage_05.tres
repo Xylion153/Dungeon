@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="QuestData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/data/quest_data.gd" id="1_quest"]
+
+[resource]
+script = ExtResource("1_quest")
+id = "main_stage_05"
+display_name = "Stage 5"
+description = "Defeat 100 enemies."
+category = 2
+objective_type = 0
+objective_target = ""
+target_count = 100
+reward_credits = 250
+reward_gems = 125
+requires_quest_id = "main_stage_04"
