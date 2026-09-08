@@ -1,13 +1,13 @@
 extends Node2D
-## A single boss-only encounter, no wave escalation - deliberately NOT using
-## WaveSpawner (see scripts/spawn/wave_spawner.gd's header: its
-## _start_next_wave() unconditionally spawns another regular-enemy pack once
-## a wave clears, which is exactly the "runs forever" behavior a raid must
-## not have). The boss is instantiated directly instead.
+## A single boss-only encounter, no wave escalation - the boss is
+## instantiated directly rather than through any kind of escalating spawner,
+## since a raid must never keep spawning more content after the boss dies
+## (that "runs forever" behavior is exactly what the old endless-mode Arena
+## did, and why it was removed).
 
 const KILL_XP := 5.0
 const BOSS_SCENE := preload("res://scenes/enemies/BossEnemy.tscn")
-const SPAWN_OFFSET := Vector2(600.0, 0.0) # roughly matches WaveSpawner's 500-700px spawn radius
+const SPAWN_OFFSET := Vector2(600.0, 0.0)
 
 @onready var player: Player = $Player
 @onready var result_screen: CanvasLayer = $RaidResultScreen

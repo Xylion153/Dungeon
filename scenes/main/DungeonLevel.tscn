@@ -9,6 +9,14 @@
 [node name="DungeonLevel" type="Node2D"]
 script = ExtResource("0")
 
+[node name="VoidBackground" type="Polygon2D" parent="."]
+polygon = PackedVector2Array(-1000, -800, 2920, -800, 2920, 1880, -1000, 1880)
+color = Color(0, 0, 0, 1)
+
+[node name="RoomFloor" type="Polygon2D" parent="."]
+position = Vector2(960, 540)
+color = Color(0.18, 0.17, 0.2, 1)
+
 [node name="RoomContent" type="Node2D" parent="."]
 position = Vector2(960, 540)
 

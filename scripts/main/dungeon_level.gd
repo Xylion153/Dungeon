@@ -8,18 +8,20 @@ extends Node2D
 
 const ROOM_COUNT := 7
 const MAX_GRID_EXTENT := 3
-const ROOM_HALF_WIDTH := 350.0
-const ROOM_HALF_HEIGHT := 250.0
+const ROOM_HALF_WIDTH := 480.0
+const ROOM_HALF_HEIGHT := 340.0
 const WALL_THICKNESS := 60.0
 const DOOR_GAP := 140.0
 const ENTRY_INSET := 90.0
 const KILL_XP := 5.0
 const BOSS_REWARD_GEMS := 75
 const REWARD_ROOM_GEMS := 25
+const SPAWN_TELEGRAPH_DURATION := 2.0 ## seconds a floor marker blinks before its enemy actually appears
 
 const ObstacleScene := preload("res://scenes/world/Obstacle.tscn")
 const BossScene := preload("res://scenes/enemies/BossEnemy.tscn")
 const LootPickupScene := preload("res://scenes/combat/LootPickup.tscn")
+const SpawnMarkerScene := preload("res://scenes/combat/SpawnMarker.tscn")
 const ENEMY_SCENES := [
 	preload("res://scenes/enemies/MeleeChaser.tscn"),
 	preload("res://scenes/enemies/RangedEnemy.tscn"),
@@ -31,12 +33,14 @@ const ENEMY_SCENES := [
 @onready var room_label: Label = $Hud/WaveLabel
 @onready var room_content: Node2D = $RoomContent
 @onready var room_camera: Camera2D = $RoomCamera
+@onready var room_floor: Polygon2D = $RoomFloor
 
 var _rooms: Dictionary = {} # Vector2i -> RoomData
 var _current_pos: Vector2i
 var _alive_enemies: Array = []
 var _door_triggers: Array[Area2D] = []
 var _room_has_enemies := false
+var _pending_spawns := 0 ## enemies whose telegraph marker hasn't resolved into a real spawn yet - the clear-check must not run while this is > 0
 
 func _ready() -> void:
 	# Fixed per-room camera, not scrolling with the player (small rooms are
@@ -46,6 +50,11 @@ func _ready() -> void:
 	# camera and the one CombatFeel's shake effects apply to.
 	room_camera.make_current()
 	CombatFeel.register_camera(room_camera)
+
+	room_floor.polygon = PackedVector2Array([
+		Vector2(-ROOM_HALF_WIDTH, -ROOM_HALF_HEIGHT), Vector2(ROOM_HALF_WIDTH, -ROOM_HALF_HEIGHT),
+		Vector2(ROOM_HALF_WIDTH, ROOM_HALF_HEIGHT), Vector2(-ROOM_HALF_WIDTH, ROOM_HALF_HEIGHT),
+	])
 
 	var generated := RoomGridGenerator.generate(ROOM_COUNT, MAX_GRID_EXTENT)
 	_rooms = generated["rooms"]
@@ -57,7 +66,7 @@ func _ready() -> void:
 	_load_room(_current_pos, Vector2i.ZERO)
 
 func _physics_process(_delta: float) -> void:
-	if not _room_has_enemies:
+	if not _room_has_enemies or _pending_spawns > 0:
 		return
 	_alive_enemies = _alive_enemies.filter(func(e): return is_instance_valid(e))
 	if _alive_enemies.is_empty():
@@ -96,6 +105,7 @@ func _load_room(pos: Vector2i, entry_direction: Vector2i) -> void:
 	_door_triggers.clear()
 	_alive_enemies.clear()
 	_room_has_enemies = false
+	_pending_spawns = 0
 
 	var room: RoomData = _rooms[pos]
 	_current_pos = pos
@@ -172,6 +182,7 @@ func _build_wall(direction: Vector2i, has_door: bool, room: RoomData) -> void:
 		_build_wall_segment(Vector2(cross_offset, segment_center_axis), size)
 
 	_build_door_trigger(direction, cross_offset, horizontal, room)
+	_build_door_frame(direction, cross_offset, horizontal)
 
 func _build_wall_segment(local_center: Vector2, size: Vector2) -> void:
 	var obstacle := ObstacleScene.instantiate()
@@ -193,6 +204,45 @@ func _build_door_trigger(direction: Vector2i, cross_offset: float, horizontal: b
 	door.body_entered.connect(_on_door_entered.bind(direction))
 	_door_triggers.append(door)
 
+## A lit threshold strip pushing out past the wall line, plus two small
+## torch-lit corner posts flanking the gap - reads as "an entryway leading
+## somewhere," distinct from the room's own stone floor and from the black
+## void beyond it.
+func _build_door_frame(direction: Vector2i, cross_offset: float, horizontal: bool) -> void:
+	const THRESHOLD_DEPTH := 60.0
+	const THRESHOLD_COLOR := Color(0.5, 0.4, 0.24, 1.0)
+	const POST_SIZE := 14.0
+	const POST_COLOR := Color(0.85, 0.6, 0.25, 1.0)
+
+	var outward: float = THRESHOLD_DEPTH if (direction == Vector2i.DOWN or direction == Vector2i.RIGHT) else -THRESHOLD_DEPTH
+	var threshold := Polygon2D.new()
+	if horizontal:
+		var y0 := cross_offset
+		var y1 := cross_offset + outward
+		threshold.polygon = PackedVector2Array([
+			Vector2(-DOOR_GAP * 0.5, y0), Vector2(DOOR_GAP * 0.5, y0),
+			Vector2(DOOR_GAP * 0.5, y1), Vector2(-DOOR_GAP * 0.5, y1),
+		])
+	else:
+		var x0 := cross_offset
+		var x1 := cross_offset + outward
+		threshold.polygon = PackedVector2Array([
+			Vector2(x0, -DOOR_GAP * 0.5), Vector2(x0, DOOR_GAP * 0.5),
+			Vector2(x1, DOOR_GAP * 0.5), Vector2(x1, -DOOR_GAP * 0.5),
+		])
+	threshold.color = THRESHOLD_COLOR
+	room_content.add_child(threshold)
+
+	for side in [-1.0, 1.0]:
+		var post := Polygon2D.new()
+		post.polygon = PackedVector2Array([
+			Vector2(-POST_SIZE, -POST_SIZE), Vector2(POST_SIZE, -POST_SIZE),
+			Vector2(POST_SIZE, POST_SIZE), Vector2(-POST_SIZE, POST_SIZE),
+		])
+		post.color = POST_COLOR
+		post.position = Vector2(side * DOOR_GAP * 0.5, cross_offset) if horizontal else Vector2(cross_offset, side * DOOR_GAP * 0.5)
+		room_content.add_child(post)
+
 func _on_door_entered(body: Node, direction: Vector2i) -> void:
 	if not body.is_in_group("player"):
 		return
@@ -205,20 +255,41 @@ func _spawn_combat_enemies() -> void:
 	var count := randi_range(2, 4)
 	for i in count:
 		var scene: PackedScene = ENEMY_SCENES[randi() % ENEMY_SCENES.size()]
-		var enemy = scene.instantiate()
-		room_content.add_child(enemy)
 		var offset := Vector2(randf_range(-ROOM_HALF_WIDTH + 80.0, ROOM_HALF_WIDTH - 80.0), randf_range(-ROOM_HALF_HEIGHT + 80.0, ROOM_HALF_HEIGHT - 80.0))
-		enemy.global_position = _local_to_global(offset)
-		_alive_enemies.append(enemy)
-	_room_has_enemies = true
+		_spawn_with_telegraph(scene, offset)
 
 func _spawn_boss() -> void:
-	var boss := BossScene.instantiate()
-	room_content.add_child(boss)
-	boss.global_position = _local_to_global(Vector2.ZERO)
-	boss.died.connect(_on_boss_died)
-	_alive_enemies.append(boss)
-	_room_has_enemies = true
+	_spawn_with_telegraph(BossScene, Vector2.ZERO)
+
+## Places a blinking marker immediately and defers the actual spawn by
+## SPAWN_TELEGRAPH_DURATION, so enemies never appear right on top of the
+## player. _room_has_enemies only flips true once every pending spawn this
+## room-load has resolved - the physics-process clear-check must not run
+## while enemies are still telegraphing, or an empty _alive_enemies list
+## would wrongly read as "cleared" before anything even spawned.
+func _spawn_with_telegraph(scene: PackedScene, local_offset: Vector2) -> void:
+	_pending_spawns += 1
+	var marker := SpawnMarkerScene.instantiate()
+	room_content.add_child(marker)
+	marker.global_position = _local_to_global(local_offset)
+	var spawn_room_pos := _current_pos # a value, not a node reference - safe to compare later even if the room was long since torn down
+
+	get_tree().create_timer(SPAWN_TELEGRAPH_DURATION).timeout.connect(func():
+		_pending_spawns -= 1
+		if spawn_room_pos != _current_pos:
+			return # the player already left this room (doors are locked during the telegraph in normal play, so this only matters defensively) - don't spawn into a stale room
+		if is_instance_valid(marker):
+			marker.queue_free()
+
+		var enemy = scene.instantiate()
+		room_content.add_child(enemy)
+		enemy.global_position = _local_to_global(local_offset)
+		if scene == BossScene:
+			enemy.died.connect(_on_boss_died)
+		_alive_enemies.append(enemy)
+		if _pending_spawns <= 0:
+			_room_has_enemies = true
+	)
 
 func _spawn_gems_pickup(local_pos: Vector2) -> void:
 	var pickup := LootPickupScene.instantiate()
