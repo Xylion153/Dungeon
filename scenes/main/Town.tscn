@@ -35,7 +35,7 @@ station_label = "Armory"
 
 [node name="ArmoryPiece" type="Sprite2D" parent="."]
 position = Vector2(436, 322)
-scale = Vector2(0.358073, 0.358073)
+scale = Vector2(0.273438, 0.273438)
 texture = ExtResource("6")
 
 [node name="SkillsStation" parent="." instance=ExtResource("3")]
@@ -45,7 +45,7 @@ station_label = "Skills"
 
 [node name="SkillsPiece" type="Sprite2D" parent="."]
 position = Vector2(1469, 322)
-scale = Vector2(0.358073, 0.358073)
+scale = Vector2(0.273438, 0.273438)
 texture = ExtResource("7")
 
 [node name="ChangeClassStation" parent="." instance=ExtResource("3")]
@@ -55,7 +55,7 @@ station_label = "Change Class"
 
 [node name="ChangeClassPiece" type="Sprite2D" parent="."]
 position = Vector2(436, 781)
-scale = Vector2(0.358073, 0.358073)
+scale = Vector2(0.273438, 0.273438)
 texture = ExtResource("8")
 
 [node name="TravelStation" parent="." instance=ExtResource("3")]
@@ -65,7 +65,7 @@ station_label = "World Map"
 
 [node name="TravelPiece" type="Sprite2D" parent="."]
 position = Vector2(1469, 781)
-scale = Vector2(0.358073, 0.358073)
+scale = Vector2(0.273438, 0.273438)
 texture = ExtResource("12")
 
 [node name="ShopStation" parent="." instance=ExtResource("3")]
@@ -75,7 +75,7 @@ station_label = "Shop"
 
 [node name="ShopPiece" type="Sprite2D" parent="."]
 position = Vector2(207, 551)
-scale = Vector2(0.358073, 0.358073)
+scale = Vector2(0.273438, 0.273438)
 texture = ExtResource("9")
 
 [node name="GachaStation" parent="." instance=ExtResource("3")]
@@ -85,7 +85,7 @@ station_label = "Gacha"
 
 [node name="GachaPiece" type="Sprite2D" parent="."]
 position = Vector2(1699, 551)
-scale = Vector2(0.358073, 0.358073)
+scale = Vector2(0.273438, 0.273438)
 texture = ExtResource("10")
 
 [node name="QuestStation" parent="." instance=ExtResource("3")]
