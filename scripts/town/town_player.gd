@@ -8,8 +8,8 @@ extends CharacterBody2D
 ## one fixed painted diorama (not a scrolling tileset), so this is a plain
 ## rectangle eyeballed against that art rather than real per-building
 ## collision against its irregular silhouette.
-@export var bounds_min := Vector2(100, 120)
-@export var bounds_max := Vector2(1820, 960)
+@export var bounds_min := Vector2(100, 60)
+@export var bounds_max := Vector2(1820, 850)
 
 @onready var player_input: PlayerInput = $PlayerInput
 @onready var sprite: AnimatedSprite2D = $Shape

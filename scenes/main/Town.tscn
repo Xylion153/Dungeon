@@ -1,17 +1,10 @@
-[gd_scene load_steps=12 format=3]
+[gd_scene load_steps=5 format=3]
 
 [ext_resource type="Script" path="res://scripts/main/town.gd" id="1"]
 [ext_resource type="PackedScene" path="res://scenes/town/TownPlayer.tscn" id="2"]
 [ext_resource type="PackedScene" path="res://scenes/town/TownStation.tscn" id="3"]
 [ext_resource type="Texture2D" path="res://assets/backgrounds/town_layout.png" id="4"]
 [ext_resource type="PackedScene" path="res://scenes/ui/TownHud.tscn" id="5"]
-[ext_resource type="Texture2D" path="res://assets/backgrounds/stations/armory.png" id="6"]
-[ext_resource type="Texture2D" path="res://assets/backgrounds/stations/skill_shop.png" id="7"]
-[ext_resource type="Texture2D" path="res://assets/backgrounds/stations/class_selection.png" id="8"]
-[ext_resource type="Texture2D" path="res://assets/backgrounds/stations/shop.png" id="9"]
-[ext_resource type="Texture2D" path="res://assets/backgrounds/stations/gacha.png" id="10"]
-[ext_resource type="Texture2D" path="res://assets/backgrounds/stations/quests.png" id="11"]
-[ext_resource type="Texture2D" path="res://assets/backgrounds/stations/world_map.png" id="12"]
 
 [node name="Town" type="Node2D"]
 script = ExtResource("1")
@@ -22,72 +15,52 @@ color = Color(0.04, 0.035, 0.05, 1)
 
 [node name="Background" type="Sprite2D" parent="."]
 position = Vector2(960, 540)
-scale = Vector2(1.607655, 1.607655)
+scale = Vector2(1.148325, 1.148325)
 texture = ExtResource("4")
 
 [node name="TownPlayer" parent="." instance=ExtResource("2")]
 position = Vector2(960, 540)
 
 [node name="ArmoryStation" parent="." instance=ExtResource("3")]
-position = Vector2(650, 230)
+position = Vector2(1500, 400)
 target_scene_path = "res://scenes/main/ArmoryMenu.tscn"
 station_label = "Armory"
-texture = ExtResource("6")
-visual_scale = 0.42
-visual_offset = Vector2(0, -40)
-collision_size = Vector2(340, 220)
+collision_size = Vector2(280, 115)
 
 [node name="SkillsStation" parent="." instance=ExtResource("3")]
-position = Vector2(1270, 230)
+position = Vector2(1780, 225)
 target_scene_path = "res://scenes/main/SkillsMenu.tscn"
 station_label = "Skills"
-texture = ExtResource("7")
-visual_scale = 0.42
-visual_offset = Vector2(0, -40)
-collision_size = Vector2(340, 220)
+collision_size = Vector2(220, 140)
 
 [node name="ChangeClassStation" parent="." instance=ExtResource("3")]
-position = Vector2(1620, 830)
+position = Vector2(1320, 90)
 target_scene_path = "res://scenes/main/ClassSelectMenu.tscn"
 station_label = "Change Class"
-texture = ExtResource("8")
-visual_scale = 0.42
-visual_offset = Vector2(0, -40)
-collision_size = Vector2(340, 220)
+collision_size = Vector2(300, 150)
 
 [node name="TravelStation" parent="." instance=ExtResource("3")]
-position = Vector2(960, 900)
+position = Vector2(820, 140)
 target_scene_path = "res://scenes/main/WorldMapMenu.tscn"
 station_label = "World Map"
-texture = ExtResource("12")
-visual_scale = 0.273438
-collision_size = Vector2(280, 150)
+collision_size = Vector2(1, 1)
 
 [node name="ShopStation" parent="." instance=ExtResource("3")]
-position = Vector2(220, 840)
+position = Vector2(285, 395)
 target_scene_path = "res://scenes/main/ShopMenu.tscn"
 station_label = "Shop"
-texture = ExtResource("9")
-visual_scale = 0.42
-visual_offset = Vector2(0, -40)
-collision_size = Vector2(340, 220)
+collision_size = Vector2(250, 110)
 
 [node name="GachaStation" parent="." instance=ExtResource("3")]
-position = Vector2(1620, 260)
+position = Vector2(140, 220)
 target_scene_path = "res://scenes/main/GachaMenu.tscn"
 station_label = "Gacha"
-texture = ExtResource("10")
-visual_scale = 0.42
-visual_offset = Vector2(0, -40)
-collision_size = Vector2(340, 220)
+collision_size = Vector2(220, 140)
 
 [node name="QuestStation" parent="." instance=ExtResource("3")]
-position = Vector2(220, 230)
+position = Vector2(405, 95)
 target_scene_path = "res://scenes/main/QuestMenu.tscn"
 station_label = "Quests"
-texture = ExtResource("11")
-visual_scale = 0.42
-visual_offset = Vector2(0, -40)
-collision_size = Vector2(340, 220)
+collision_size = Vector2(310, 160)
 
 [node name="TownHud" parent="." instance=ExtResource("5")]
