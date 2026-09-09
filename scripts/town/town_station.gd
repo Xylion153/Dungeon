@@ -1,8 +1,10 @@
 extends Area2D
 ## A Town building: solid (a StaticBody2D blocks the player from walking
-## through it) and interactive (this Area2D, sized slightly larger than the
-## solid footprint, opens target_scene_path on overlap - "touching" the
-## building). One node now covers what used to be two separate pieces: an
+## through the whole footprint) and interactive only from its entrance (this
+## Area2D's trigger shape sits offset toward the plaza/statue-facing side,
+## not wrapped uniformly around the whole building) - walking up to the
+## door opens target_scene_path, walking into the back/sides just bumps the
+## solid wall. One node covers what used to be two separate pieces: an
 ## invisible trigger-only Area2D plus a free-floating, walk-through-able
 ## visual sprite with no collision at all.
 
@@ -11,9 +13,9 @@ extends Area2D
 @export var texture: Texture2D
 @export var visual_scale := 1.0
 @export var visual_offset := Vector2.ZERO ## lets the sprite be nudged relative to the collision/trigger center, since art isn't always centered on its own canvas
-@export var collision_size := Vector2(300.0, 200.0) ## the building's solid footprint; the trigger zone is this plus a margin
-
-const TRIGGER_MARGIN := 80.0
+@export var collision_size := Vector2(300.0, 200.0) ## the building's solid footprint
+@export var entrance_offset := Vector2.ZERO ## trigger center, relative to this node's position - point this toward the plaza/statue so only the door side is interactive
+@export var entrance_size := Vector2(180.0, 140.0) ## trigger zone size at the entrance
 
 var _triggered := false
 
@@ -36,8 +38,9 @@ func _ready() -> void:
 	body_shape.shape = body_rect
 
 	var trigger_rect := RectangleShape2D.new()
-	trigger_rect.size = collision_size + Vector2(TRIGGER_MARGIN, TRIGGER_MARGIN) * 2.0
+	trigger_rect.size = entrance_size
 	trigger_shape.shape = trigger_rect
+	trigger_shape.position = entrance_offset
 
 func _on_body_entered(body: Node) -> void:
 	if _triggered or not body.is_in_group("player"):

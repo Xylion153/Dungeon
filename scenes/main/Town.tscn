@@ -6,28 +6,28 @@
 [ext_resource type="Texture2D" path="res://assets/backgrounds/town_layout.png" id="4"]
 [ext_resource type="PackedScene" path="res://scenes/ui/TownHud.tscn" id="5"]
 
-[sub_resource type="RectangleShape2D" id="Gap_NNW"]
-size = Vector2(160, 260)
+[sub_resource type="RectangleShape2D" id="Gap_1"]
+size = Vector2(190, 220)
 
-[sub_resource type="RectangleShape2D" id="Gap_NNE"]
-size = Vector2(160, 260)
+[sub_resource type="RectangleShape2D" id="Gap_2"]
+size = Vector2(190, 220)
 
-[sub_resource type="RectangleShape2D" id="Gap_ENE"]
+[sub_resource type="RectangleShape2D" id="Gap_3"]
 size = Vector2(200, 220)
 
-[sub_resource type="RectangleShape2D" id="Gap_ESE"]
+[sub_resource type="RectangleShape2D" id="Gap_4"]
 size = Vector2(200, 240)
 
-[sub_resource type="RectangleShape2D" id="Gap_SSE"]
-size = Vector2(200, 220)
+[sub_resource type="RectangleShape2D" id="Gap_5"]
+size = Vector2(200, 210)
 
-[sub_resource type="RectangleShape2D" id="Gap_SSW"]
-size = Vector2(200, 220)
+[sub_resource type="RectangleShape2D" id="Gap_6"]
+size = Vector2(200, 210)
 
-[sub_resource type="RectangleShape2D" id="Gap_WSW"]
+[sub_resource type="RectangleShape2D" id="Gap_7"]
 size = Vector2(200, 240)
 
-[sub_resource type="RectangleShape2D" id="Gap_WNW"]
+[sub_resource type="RectangleShape2D" id="Gap_8"]
 size = Vector2(200, 220)
 
 [node name="Town" type="Node2D"]
@@ -45,118 +45,132 @@ texture = ExtResource("4")
 [node name="TownPlayer" parent="." instance=ExtResource("2")]
 position = Vector2(960, 540)
 
-[node name="ArmoryStation" parent="." instance=ExtResource("3")]
-position = Vector2(1500, 400)
-target_scene_path = "res://scenes/main/ArmoryMenu.tscn"
-station_label = "Armory"
-collision_size = Vector2(280, 115)
-
-[node name="SkillsStation" parent="." instance=ExtResource("3")]
-position = Vector2(1780, 225)
-target_scene_path = "res://scenes/main/SkillsMenu.tscn"
-station_label = "Skills"
-collision_size = Vector2(220, 140)
+[node name="QuestStation" parent="." instance=ExtResource("3")]
+position = Vector2(590, 165)
+target_scene_path = "res://scenes/main/QuestMenu.tscn"
+station_label = "Quests"
+collision_size = Vector2(300, 180)
+entrance_offset = Vector2(69, 72)
+entrance_size = Vector2(180, 140)
 
 [node name="ChangeClassStation" parent="." instance=ExtResource("3")]
-position = Vector2(1320, 90)
+position = Vector2(1305, 160)
 target_scene_path = "res://scenes/main/ClassSelectMenu.tscn"
 station_label = "Change Class"
-collision_size = Vector2(300, 150)
+collision_size = Vector2(310, 190)
+entrance_offset = Vector2(-76, 65)
+entrance_size = Vector2(180, 140)
+
+[node name="GachaStation" parent="." instance=ExtResource("3")]
+position = Vector2(212, 380)
+target_scene_path = "res://scenes/main/GachaMenu.tscn"
+station_label = "Gacha"
+collision_size = Vector2(220, 180)
+entrance_offset = Vector2(99, 17)
+entrance_size = Vector2(180, 140)
+
+[node name="SkillsStation" parent="." instance=ExtResource("3")]
+position = Vector2(1700, 380)
+target_scene_path = "res://scenes/main/SkillsMenu.tscn"
+station_label = "Skills"
+collision_size = Vector2(220, 180)
+entrance_offset = Vector2(-99, 15)
+entrance_size = Vector2(180, 140)
+
+[node name="ShopStation" parent="." instance=ExtResource("3")]
+position = Vector2(542, 715)
+target_scene_path = "res://scenes/main/ShopMenu.tscn"
+station_label = "Shop"
+collision_size = Vector2(300, 165)
+entrance_offset = Vector2(86, -50)
+entrance_size = Vector2(180, 140)
+
+[node name="ArmoryStation" parent="." instance=ExtResource("3")]
+position = Vector2(1342, 715)
+target_scene_path = "res://scenes/main/ArmoryMenu.tscn"
+station_label = "Armory"
+collision_size = Vector2(300, 170)
+entrance_offset = Vector2(-90, -45)
+entrance_size = Vector2(180, 140)
 
 [node name="TravelStation" parent="." instance=ExtResource("3")]
-position = Vector2(820, 140)
+position = Vector2(895, 120)
 target_scene_path = "res://scenes/main/WorldMapMenu.tscn"
 station_label = "World Map"
 collision_size = Vector2(1, 1)
+entrance_offset = Vector2(0, 60)
+entrance_size = Vector2(200, 160)
 
-[node name="ShopStation" parent="." instance=ExtResource("3")]
-position = Vector2(285, 395)
-target_scene_path = "res://scenes/main/ShopMenu.tscn"
-station_label = "Shop"
-collision_size = Vector2(250, 110)
-
-[node name="GachaStation" parent="." instance=ExtResource("3")]
-position = Vector2(140, 220)
-target_scene_path = "res://scenes/main/GachaMenu.tscn"
-station_label = "Gacha"
-collision_size = Vector2(220, 140)
-
-[node name="QuestStation" parent="." instance=ExtResource("3")]
-position = Vector2(405, 95)
-target_scene_path = "res://scenes/main/QuestMenu.tscn"
-station_label = "Quests"
-collision_size = Vector2(310, 160)
-
-[node name="GapNNW" type="StaticBody2D" parent="."]
-position = Vector2(650, 150)
-rotation = -0.349066
+[node name="Gap1" type="StaticBody2D" parent="."]
+position = Vector2(742, 142)
+rotation = -0.436332
 collision_layer = 1
 collision_mask = 0
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="GapNNW"]
-shape = SubResource("Gap_NNW")
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Gap1"]
+shape = SubResource("Gap_1")
 
-[node name="GapNNE" type="StaticBody2D" parent="."]
-position = Vector2(1080, 150)
-rotation = 0.349066
+[node name="Gap2" type="StaticBody2D" parent="."]
+position = Vector2(1100, 140)
+rotation = 0.436332
 collision_layer = 1
 collision_mask = 0
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="GapNNE"]
-shape = SubResource("Gap_NNE")
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Gap2"]
+shape = SubResource("Gap_2")
 
-[node name="GapENE" type="StaticBody2D" parent="."]
-position = Vector2(1500, 300)
-rotation = 0.959931
+[node name="Gap3" type="StaticBody2D" parent="."]
+position = Vector2(1502, 270)
+rotation = 1.047198
 collision_layer = 1
 collision_mask = 0
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="GapENE"]
-shape = SubResource("Gap_ENE")
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Gap3"]
+shape = SubResource("Gap_3")
 
-[node name="GapESE" type="StaticBody2D" parent="."]
-position = Vector2(1580, 580)
+[node name="Gap4" type="StaticBody2D" parent="."]
+position = Vector2(1521, 547)
 rotation = -0.959931
 collision_layer = 1
 collision_mask = 0
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="GapESE"]
-shape = SubResource("Gap_ESE")
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Gap4"]
+shape = SubResource("Gap_4")
 
-[node name="GapSSE" type="StaticBody2D" parent="."]
-position = Vector2(1150, 720)
-rotation = 0.349066
+[node name="Gap5" type="StaticBody2D" parent="."]
+position = Vector2(1126, 807)
+rotation = 0.436332
 collision_layer = 1
 collision_mask = 0
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="GapSSE"]
-shape = SubResource("Gap_SSE")
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Gap5"]
+shape = SubResource("Gap_5")
 
-[node name="GapSSW" type="StaticBody2D" parent="."]
-position = Vector2(680, 720)
-rotation = -0.349066
+[node name="Gap6" type="StaticBody2D" parent="."]
+position = Vector2(726, 807)
+rotation = -0.436332
 collision_layer = 1
 collision_mask = 0
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="GapSSW"]
-shape = SubResource("Gap_SSW")
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Gap6"]
+shape = SubResource("Gap_6")
 
-[node name="GapWSW" type="StaticBody2D" parent="."]
-position = Vector2(310, 580)
+[node name="Gap7" type="StaticBody2D" parent="."]
+position = Vector2(377, 547)
 rotation = 0.959931
 collision_layer = 1
 collision_mask = 0
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="GapWSW"]
-shape = SubResource("Gap_WSW")
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Gap7"]
+shape = SubResource("Gap_7")
 
-[node name="GapWNW" type="StaticBody2D" parent="."]
-position = Vector2(280, 300)
-rotation = -0.959931
+[node name="Gap8" type="StaticBody2D" parent="."]
+position = Vector2(401, 272)
+rotation = -1.047198
 collision_layer = 1
 collision_mask = 0
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="GapWNW"]
-shape = SubResource("Gap_WNW")
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Gap8"]
+shape = SubResource("Gap_8")
 
 [node name="TownHud" parent="." instance=ExtResource("5")]
