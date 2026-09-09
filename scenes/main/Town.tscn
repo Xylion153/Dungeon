@@ -11,6 +11,7 @@
 [ext_resource type="Texture2D" path="res://assets/backgrounds/stations/shop.png" id="9"]
 [ext_resource type="Texture2D" path="res://assets/backgrounds/stations/gacha.png" id="10"]
 [ext_resource type="Texture2D" path="res://assets/backgrounds/stations/quests.png" id="11"]
+[ext_resource type="Texture2D" path="res://assets/backgrounds/stations/world_map.png" id="12"]
 
 [node name="Town" type="Node2D"]
 script = ExtResource("1")
@@ -58,28 +59,10 @@ position = Vector2(1469, 781)
 target_scene_path = "res://scenes/main/WorldMapMenu.tscn"
 station_label = "World Map"
 
-[node name="TravelMarker" type="Node2D" parent="."]
+[node name="TravelPiece" type="Sprite2D" parent="."]
 position = Vector2(1469, 781)
-
-[node name="Visual" type="Polygon2D" parent="TravelMarker"]
-color = Color(0.6, 0.45, 0.2, 1)
-polygon = PackedVector2Array(-48, -48, 48, -48, 48, 48, -48, 48)
-
-[node name="Outline" type="Line2D" parent="TravelMarker"]
-points = PackedVector2Array(-48, -48, 48, -48, 48, 48, -48, 48, -48, -48)
-width = 3.0
-default_color = Color(1, 0.85, 0.55, 0.9)
-joint_mode = 2
-
-[node name="Label" type="Label" parent="TravelMarker"]
-offset_left = -70.0
-offset_top = -95.0
-offset_right = 70.0
-offset_bottom = -60.0
-theme_override_colors/font_color = Color(1, 0.85, 0.55, 1)
-theme_override_font_sizes/font_size = 22
-horizontal_alignment = 1
-text = "World Map"
+scale = Vector2(0.358073, 0.358073)
+texture = ExtResource("12")
 
 [node name="ShopStation" parent="." instance=ExtResource("3")]
 position = Vector2(207, 551)
