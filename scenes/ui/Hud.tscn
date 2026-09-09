@@ -46,9 +46,9 @@ anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
 offset_left = -375.0
-offset_top = -470.0
+offset_top = -505.0
 offset_right = -235.0
-offset_bottom = -435.0
+offset_bottom = -470.0
 theme_override_colors/font_color = Color(0.4, 0.65, 1, 1)
 theme_override_font_sizes/font_size = 20
 horizontal_alignment = 1
@@ -62,10 +62,10 @@ anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
 custom_minimum_size = Vector2(0, 0)
-offset_left = -410.0
+offset_left = -460.0
 offset_top = -260.0
-offset_right = -280.0
-offset_bottom = -130.0
+offset_right = -290.0
+offset_bottom = -90.0
 
 [node name="Button" parent="DashButton" index="0"]
 text = "Dash"
@@ -78,10 +78,10 @@ anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
 custom_minimum_size = Vector2(0, 0)
-offset_left = -375.0
-offset_top = -430.0
-offset_right = -235.0
-offset_bottom = -290.0
+offset_left = -440.0
+offset_top = -460.0
+offset_right = -260.0
+offset_bottom = -280.0
 
 [node name="Button" parent="SkillButton" index="0"]
 text = "Skill"

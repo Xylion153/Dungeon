@@ -29,73 +29,60 @@ texture = ExtResource("4")
 position = Vector2(960, 540)
 
 [node name="ArmoryStation" parent="." instance=ExtResource("3")]
-position = Vector2(436, 322)
+position = Vector2(650, 230)
 target_scene_path = "res://scenes/main/ArmoryMenu.tscn"
 station_label = "Armory"
-
-[node name="ArmoryPiece" type="Sprite2D" parent="."]
-position = Vector2(436, 322)
-scale = Vector2(0.273438, 0.273438)
 texture = ExtResource("6")
+visual_scale = 0.273438
+collision_size = Vector2(280, 150)
 
 [node name="SkillsStation" parent="." instance=ExtResource("3")]
-position = Vector2(1469, 322)
+position = Vector2(1270, 230)
 target_scene_path = "res://scenes/main/SkillsMenu.tscn"
 station_label = "Skills"
-
-[node name="SkillsPiece" type="Sprite2D" parent="."]
-position = Vector2(1469, 322)
-scale = Vector2(0.273438, 0.273438)
 texture = ExtResource("7")
+visual_scale = 0.273438
+collision_size = Vector2(280, 150)
 
 [node name="ChangeClassStation" parent="." instance=ExtResource("3")]
-position = Vector2(436, 781)
+position = Vector2(1620, 830)
 target_scene_path = "res://scenes/main/ClassSelectMenu.tscn"
 station_label = "Change Class"
-
-[node name="ChangeClassPiece" type="Sprite2D" parent="."]
-position = Vector2(436, 781)
-scale = Vector2(0.273438, 0.273438)
 texture = ExtResource("8")
+visual_scale = 0.273438
+collision_size = Vector2(280, 150)
 
 [node name="TravelStation" parent="." instance=ExtResource("3")]
-position = Vector2(1469, 781)
+position = Vector2(960, 900)
 target_scene_path = "res://scenes/main/WorldMapMenu.tscn"
 station_label = "World Map"
-
-[node name="TravelPiece" type="Sprite2D" parent="."]
-position = Vector2(1469, 781)
-scale = Vector2(0.273438, 0.273438)
 texture = ExtResource("12")
+visual_scale = 0.273438
+collision_size = Vector2(280, 150)
 
 [node name="ShopStation" parent="." instance=ExtResource("3")]
-position = Vector2(207, 551)
+position = Vector2(220, 840)
 target_scene_path = "res://scenes/main/ShopMenu.tscn"
 station_label = "Shop"
-
-[node name="ShopPiece" type="Sprite2D" parent="."]
-position = Vector2(207, 551)
-scale = Vector2(0.273438, 0.273438)
 texture = ExtResource("9")
+visual_scale = 0.273438
+collision_size = Vector2(280, 150)
 
 [node name="GachaStation" parent="." instance=ExtResource("3")]
-position = Vector2(1699, 551)
+position = Vector2(1620, 260)
 target_scene_path = "res://scenes/main/GachaMenu.tscn"
 station_label = "Gacha"
-
-[node name="GachaPiece" type="Sprite2D" parent="."]
-position = Vector2(1699, 551)
-scale = Vector2(0.273438, 0.273438)
 texture = ExtResource("10")
+visual_scale = 0.273438
+collision_size = Vector2(280, 150)
 
 [node name="QuestStation" parent="." instance=ExtResource("3")]
-position = Vector2(953, 660)
+position = Vector2(220, 230)
 target_scene_path = "res://scenes/main/QuestMenu.tscn"
 station_label = "Quests"
-
-[node name="QuestPiece" type="Sprite2D" parent="."]
-position = Vector2(953, 660)
-scale = Vector2(0.273438, 0.273438)
 texture = ExtResource("11")
+visual_scale = 0.42
+visual_offset = Vector2(0, -40)
+collision_size = Vector2(340, 220)
 
 [node name="TownHud" parent="." instance=ExtResource("5")]
