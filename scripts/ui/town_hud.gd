@@ -4,7 +4,7 @@ extends CanvasLayer
 ## Player, and polls credits each frame since there's no changed signal.
 
 @onready var joystick: Control = $VirtualJoystick
-@onready var credits_label: Label = $CreditsLabel
+@onready var credits_label: Label = $CreditsPanel/CreditsLabel
 
 func _ready() -> void:
 	call_deferred("_bind_player")
