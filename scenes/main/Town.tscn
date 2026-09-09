@@ -1,10 +1,34 @@
-[gd_scene load_steps=5 format=3]
+[gd_scene load_steps=13 format=3]
 
 [ext_resource type="Script" path="res://scripts/main/town.gd" id="1"]
 [ext_resource type="PackedScene" path="res://scenes/town/TownPlayer.tscn" id="2"]
 [ext_resource type="PackedScene" path="res://scenes/town/TownStation.tscn" id="3"]
 [ext_resource type="Texture2D" path="res://assets/backgrounds/town_layout.png" id="4"]
 [ext_resource type="PackedScene" path="res://scenes/ui/TownHud.tscn" id="5"]
+
+[sub_resource type="RectangleShape2D" id="Gap_NNW"]
+size = Vector2(160, 260)
+
+[sub_resource type="RectangleShape2D" id="Gap_NNE"]
+size = Vector2(160, 260)
+
+[sub_resource type="RectangleShape2D" id="Gap_ENE"]
+size = Vector2(200, 220)
+
+[sub_resource type="RectangleShape2D" id="Gap_ESE"]
+size = Vector2(200, 240)
+
+[sub_resource type="RectangleShape2D" id="Gap_SSE"]
+size = Vector2(200, 220)
+
+[sub_resource type="RectangleShape2D" id="Gap_SSW"]
+size = Vector2(200, 220)
+
+[sub_resource type="RectangleShape2D" id="Gap_WSW"]
+size = Vector2(200, 240)
+
+[sub_resource type="RectangleShape2D" id="Gap_WNW"]
+size = Vector2(200, 220)
 
 [node name="Town" type="Node2D"]
 script = ExtResource("1")
@@ -62,5 +86,77 @@ position = Vector2(405, 95)
 target_scene_path = "res://scenes/main/QuestMenu.tscn"
 station_label = "Quests"
 collision_size = Vector2(310, 160)
+
+[node name="GapNNW" type="StaticBody2D" parent="."]
+position = Vector2(650, 150)
+rotation = -0.349066
+collision_layer = 1
+collision_mask = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="GapNNW"]
+shape = SubResource("Gap_NNW")
+
+[node name="GapNNE" type="StaticBody2D" parent="."]
+position = Vector2(1080, 150)
+rotation = 0.349066
+collision_layer = 1
+collision_mask = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="GapNNE"]
+shape = SubResource("Gap_NNE")
+
+[node name="GapENE" type="StaticBody2D" parent="."]
+position = Vector2(1500, 300)
+rotation = 0.959931
+collision_layer = 1
+collision_mask = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="GapENE"]
+shape = SubResource("Gap_ENE")
+
+[node name="GapESE" type="StaticBody2D" parent="."]
+position = Vector2(1580, 580)
+rotation = -0.959931
+collision_layer = 1
+collision_mask = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="GapESE"]
+shape = SubResource("Gap_ESE")
+
+[node name="GapSSE" type="StaticBody2D" parent="."]
+position = Vector2(1150, 720)
+rotation = 0.349066
+collision_layer = 1
+collision_mask = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="GapSSE"]
+shape = SubResource("Gap_SSE")
+
+[node name="GapSSW" type="StaticBody2D" parent="."]
+position = Vector2(680, 720)
+rotation = -0.349066
+collision_layer = 1
+collision_mask = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="GapSSW"]
+shape = SubResource("Gap_SSW")
+
+[node name="GapWSW" type="StaticBody2D" parent="."]
+position = Vector2(310, 580)
+rotation = 0.959931
+collision_layer = 1
+collision_mask = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="GapWSW"]
+shape = SubResource("Gap_WSW")
+
+[node name="GapWNW" type="StaticBody2D" parent="."]
+position = Vector2(280, 300)
+rotation = -0.959931
+collision_layer = 1
+collision_mask = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="GapWNW"]
+shape = SubResource("Gap_WNW")
 
 [node name="TownHud" parent="." instance=ExtResource("5")]
