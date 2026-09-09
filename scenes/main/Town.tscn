@@ -1,10 +1,16 @@
-[gd_scene load_steps=6 format=3]
+[gd_scene load_steps=12 format=3]
 
 [ext_resource type="Script" path="res://scripts/main/town.gd" id="1"]
 [ext_resource type="PackedScene" path="res://scenes/town/TownPlayer.tscn" id="2"]
 [ext_resource type="PackedScene" path="res://scenes/town/TownStation.tscn" id="3"]
 [ext_resource type="Texture2D" path="res://assets/backgrounds/town_layout.png" id="4"]
 [ext_resource type="PackedScene" path="res://scenes/ui/TownHud.tscn" id="5"]
+[ext_resource type="Texture2D" path="res://assets/backgrounds/stations/armory.png" id="6"]
+[ext_resource type="Texture2D" path="res://assets/backgrounds/stations/skill_shop.png" id="7"]
+[ext_resource type="Texture2D" path="res://assets/backgrounds/stations/class_selection.png" id="8"]
+[ext_resource type="Texture2D" path="res://assets/backgrounds/stations/shop.png" id="9"]
+[ext_resource type="Texture2D" path="res://assets/backgrounds/stations/gacha.png" id="10"]
+[ext_resource type="Texture2D" path="res://assets/backgrounds/stations/quests.png" id="11"]
 
 [node name="Town" type="Node2D"]
 script = ExtResource("1")
@@ -22,85 +28,30 @@ position = Vector2(436, 322)
 target_scene_path = "res://scenes/main/ArmoryMenu.tscn"
 station_label = "Armory"
 
-[node name="ArmoryMarker" type="Node2D" parent="."]
+[node name="ArmoryPiece" type="Sprite2D" parent="."]
 position = Vector2(436, 322)
-
-[node name="Visual" type="Polygon2D" parent="ArmoryMarker"]
-color = Color(0.55, 0.2, 0.2, 1)
-polygon = PackedVector2Array(-48, -48, 48, -48, 48, 48, -48, 48)
-
-[node name="Outline" type="Line2D" parent="ArmoryMarker"]
-points = PackedVector2Array(-48, -48, 48, -48, 48, 48, -48, 48, -48, -48)
-width = 3.0
-default_color = Color(1, 0.5, 0.5, 0.9)
-joint_mode = 2
-
-[node name="Label" type="Label" parent="ArmoryMarker"]
-offset_left = -70.0
-offset_top = -95.0
-offset_right = 70.0
-offset_bottom = -60.0
-theme_override_colors/font_color = Color(1, 0.5, 0.5, 1)
-theme_override_font_sizes/font_size = 22
-horizontal_alignment = 1
-text = "Armory"
+scale = Vector2(0.358073, 0.358073)
+texture = ExtResource("6")
 
 [node name="SkillsStation" parent="." instance=ExtResource("3")]
 position = Vector2(1469, 322)
 target_scene_path = "res://scenes/main/SkillsMenu.tscn"
 station_label = "Skills"
 
-[node name="SkillsMarker" type="Node2D" parent="."]
+[node name="SkillsPiece" type="Sprite2D" parent="."]
 position = Vector2(1469, 322)
-
-[node name="Visual" type="Polygon2D" parent="SkillsMarker"]
-color = Color(0.25, 0.35, 0.65, 1)
-polygon = PackedVector2Array(-48, -48, 48, -48, 48, 48, -48, 48)
-
-[node name="Outline" type="Line2D" parent="SkillsMarker"]
-points = PackedVector2Array(-48, -48, 48, -48, 48, 48, -48, 48, -48, -48)
-width = 3.0
-default_color = Color(0.6, 0.7, 1, 0.9)
-joint_mode = 2
-
-[node name="Label" type="Label" parent="SkillsMarker"]
-offset_left = -70.0
-offset_top = -95.0
-offset_right = 70.0
-offset_bottom = -60.0
-theme_override_colors/font_color = Color(0.6, 0.7, 1, 1)
-theme_override_font_sizes/font_size = 22
-horizontal_alignment = 1
-text = "Skills"
+scale = Vector2(0.358073, 0.358073)
+texture = ExtResource("7")
 
 [node name="ChangeClassStation" parent="." instance=ExtResource("3")]
 position = Vector2(436, 781)
 target_scene_path = "res://scenes/main/ClassSelectMenu.tscn"
 station_label = "Change Class"
 
-[node name="ChangeClassMarker" type="Node2D" parent="."]
+[node name="ChangeClassPiece" type="Sprite2D" parent="."]
 position = Vector2(436, 781)
-
-[node name="Visual" type="Polygon2D" parent="ChangeClassMarker"]
-color = Color(0.5, 0.5, 0.55, 1)
-polygon = PackedVector2Array(-48, -48, 48, -48, 48, 48, -48, 48)
-
-[node name="Outline" type="Line2D" parent="ChangeClassMarker"]
-points = PackedVector2Array(-48, -48, 48, -48, 48, 48, -48, 48, -48, -48)
-width = 3.0
-default_color = Color(0.85, 0.85, 0.9, 0.9)
-joint_mode = 2
-
-[node name="Label" type="Label" parent="ChangeClassMarker"]
-offset_left = -70.0
-offset_top = -95.0
-offset_right = 70.0
-offset_bottom = -60.0
-theme_override_colors/font_color = Color(0.85, 0.85, 0.9, 1)
-theme_override_font_sizes/font_size = 22
-horizontal_alignment = 1
-text = "Change Class"
-autowrap_mode = 2
+scale = Vector2(0.358073, 0.358073)
+texture = ExtResource("8")
 
 [node name="TravelStation" parent="." instance=ExtResource("3")]
 position = Vector2(1469, 781)
@@ -135,83 +86,29 @@ position = Vector2(207, 551)
 target_scene_path = "res://scenes/main/ShopMenu.tscn"
 station_label = "Shop"
 
-[node name="ShopMarker" type="Node2D" parent="."]
+[node name="ShopPiece" type="Sprite2D" parent="."]
 position = Vector2(207, 551)
-
-[node name="Visual" type="Polygon2D" parent="ShopMarker"]
-color = Color(0.75, 0.55, 0.2, 1)
-polygon = PackedVector2Array(-48, -48, 48, -48, 48, 48, -48, 48)
-
-[node name="Outline" type="Line2D" parent="ShopMarker"]
-points = PackedVector2Array(-48, -48, 48, -48, 48, 48, -48, 48, -48, -48)
-width = 3.0
-default_color = Color(1, 0.9, 0.6, 0.9)
-joint_mode = 2
-
-[node name="Label" type="Label" parent="ShopMarker"]
-offset_left = -70.0
-offset_top = -95.0
-offset_right = 70.0
-offset_bottom = -60.0
-theme_override_colors/font_color = Color(1, 0.9, 0.6, 1)
-theme_override_font_sizes/font_size = 22
-horizontal_alignment = 1
-text = "Shop"
+scale = Vector2(0.358073, 0.358073)
+texture = ExtResource("9")
 
 [node name="GachaStation" parent="." instance=ExtResource("3")]
 position = Vector2(1699, 551)
 target_scene_path = "res://scenes/main/GachaMenu.tscn"
 station_label = "Gacha"
 
-[node name="GachaMarker" type="Node2D" parent="."]
+[node name="GachaPiece" type="Sprite2D" parent="."]
 position = Vector2(1699, 551)
-
-[node name="Visual" type="Polygon2D" parent="GachaMarker"]
-color = Color(0.55, 0.3, 0.75, 1)
-polygon = PackedVector2Array(-48, -48, 48, -48, 48, 48, -48, 48)
-
-[node name="Outline" type="Line2D" parent="GachaMarker"]
-points = PackedVector2Array(-48, -48, 48, -48, 48, 48, -48, 48, -48, -48)
-width = 3.0
-default_color = Color(0.85, 0.65, 1, 0.9)
-joint_mode = 2
-
-[node name="Label" type="Label" parent="GachaMarker"]
-offset_left = -70.0
-offset_top = -95.0
-offset_right = 70.0
-offset_bottom = -60.0
-theme_override_colors/font_color = Color(0.85, 0.65, 1, 1)
-theme_override_font_sizes/font_size = 22
-horizontal_alignment = 1
-text = "Gacha"
+scale = Vector2(0.358073, 0.358073)
+texture = ExtResource("10")
 
 [node name="QuestStation" parent="." instance=ExtResource("3")]
-position = Vector2(953, 746)
+position = Vector2(953, 660)
 target_scene_path = "res://scenes/main/QuestMenu.tscn"
 station_label = "Quests"
 
-[node name="QuestMarker" type="Node2D" parent="."]
-position = Vector2(953, 746)
-
-[node name="Visual" type="Polygon2D" parent="QuestMarker"]
-color = Color(0.25, 0.55, 0.35, 1)
-polygon = PackedVector2Array(-48, -48, 48, -48, 48, 48, -48, 48)
-
-[node name="Outline" type="Line2D" parent="QuestMarker"]
-points = PackedVector2Array(-48, -48, 48, -48, 48, 48, -48, 48, -48, -48)
-width = 3.0
-default_color = Color(0.6, 0.95, 0.7, 0.9)
-joint_mode = 2
-
-[node name="Label" type="Label" parent="QuestMarker"]
-offset_left = -70.0
-offset_top = -95.0
-offset_right = 70.0
-offset_bottom = -60.0
-theme_override_colors/font_color = Color(0.6, 0.95, 0.7, 1)
-theme_override_font_sizes/font_size = 22
-horizontal_alignment = 1
-text = "Quests"
+[node name="QuestPiece" type="Sprite2D" parent="."]
+position = Vector2(953, 660)
+scale = Vector2(0.273438, 0.273438)
+texture = ExtResource("11")
 
 [node name="TownHud" parent="." instance=ExtResource("5")]
