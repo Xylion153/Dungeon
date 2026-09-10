@@ -90,7 +90,7 @@ body {
 	z-index: 1;
 }
 		</style>
-		<style>html,body{width:100%!important;height:100%!important;margin:0;padding:0;overflow:hidden;position:fixed;background:#000;}#canvas{display:block;}</style><script>function __coverFit(){var c=document.getElementById('canvas');if(!c)return;var vw=window.innerWidth,vh=window.innerHeight;c.style.transform='none';var cw=c.offsetWidth,ch=c.offsetHeight;if(!cw||!ch)return;var scale=Math.max(vw/cw,vh/ch);c.style.position='fixed';c.style.left='50%';c.style.top='50%';c.style.transformOrigin='center center';c.style.transform='translate(-50%,-50%) scale('+scale+')';}function __forceResize(){window.dispatchEvent(new Event('resize'));setTimeout(__coverFit,50);}window.addEventListener('load',function(){setTimeout(__forceResize,300);setTimeout(__forceResize,1000);setTimeout(__forceResize,2000);setTimeout(__coverFit,2500);});if(window.visualViewport){window.visualViewport.addEventListener('resize',__forceResize);}window.addEventListener('resize',__coverFit);window.addEventListener('orientationchange',function(){setTimeout(__forceResize,300);});</script>
+		<style>html,body{width:100%!important;height:100%!important;margin:0;padding:0;overflow:hidden;position:fixed;}#canvas{width:100%!important;height:100%!important;}</style>
 	</head>
 	<body>
 		<canvas id="canvas">
@@ -109,7 +109,7 @@ body {
 
 		<script src="index.js"></script>
 		<script>
-const GODOT_CONFIG = {"args":[],"canvasResizePolicy":2,"emscriptenPoolSize":8,"ensureCrossOriginIsolationHeaders":true,"executable":"index","experimentalVK":true,"fileSizes":{"index.pck":28864704,"index.wasm":37695054},"focusCanvas":true,"gdextensionLibs":[],"godotPoolSize":4};
+const GODOT_CONFIG = {"args":[],"canvasResizePolicy":2,"emscriptenPoolSize":8,"ensureCrossOriginIsolationHeaders":true,"executable":"index","experimentalVK":true,"fileSizes":{"index.pck":28864736,"index.wasm":37695054},"focusCanvas":true,"gdextensionLibs":[],"godotPoolSize":4};
 const GODOT_THREADS_ENABLED = false;
 const engine = new Engine(GODOT_CONFIG);
 
